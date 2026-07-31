@@ -385,38 +385,78 @@ a:hover { background-color: var(--purple-wash); }
 
 /* --- dark mode -------------------------------------------------- */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    /* Same two roles, lifted for a dark ground: the strong purple carries
-       text, the soft purple stays behind it on borders. */
-    --purple-dark: #c79ad9;
-    --purple-light: #8f66a3;
-    --purple-wash: rgba(199, 154, 217, 0.16);
-    --purple-line: rgba(199, 154, 217, 0.18);
-    --purple-shadow: rgba(0, 0, 0, 0.35);
-    --purple-shadow-lift: rgba(0, 0, 0, 0.55);
-    --on-purple: #14101a;
+/* data-theme is stamped on <html> by an inline script in <head>, before
+   first paint, from the saved choice or the system setting. Keying off the
+   attribute rather than the media query lets the toggle override the system. */
 
-    --ink: #ece8f0;
-    --ink-soft: rgba(236, 232, 240, 0.72);
-    --body-grey: #b6aec1;
-    --muted: #8d8496;
-    --rule: #2b2434;
-    --bg: #14101a;
-    --card-bg: #1b1622;
-  }
+:root[data-theme="dark"] {
+  /* Same two roles, lifted for a dark ground: the strong purple carries
+     text, the soft purple stays behind it on borders. */
+  --purple-dark: #c79ad9;
+  --purple-light: #8f66a3;
+  --purple-wash: rgba(199, 154, 217, 0.16);
+  --purple-line: rgba(199, 154, 217, 0.18);
+  --purple-shadow: rgba(0, 0, 0, 0.35);
+  --purple-shadow-lift: rgba(0, 0, 0, 0.55);
+  --on-purple: #14101a;
 
-  .nav { background: rgba(20, 16, 26, 0.94); }
-
-  /* The paper thumbnails are artwork on white, so keep them on white and
-     let the padding read as a mount rather than a glare. */
-  .work .thumb {
-    background: #fff;
-    padding: 6px;
-  }
-
-  .card img.portrait { filter: brightness(0.94); }
+  --ink: #ece8f0;
+  --ink-soft: rgba(236, 232, 240, 0.72);
+  --body-grey: #b6aec1;
+  --muted: #8d8496;
+  --rule: #2b2434;
+  --bg: #14101a;
+  --card-bg: #1b1622;
 }
+
+:root[data-theme="dark"] .nav { background: rgba(20, 16, 26, 0.94); }
+
+/* The paper thumbnails are artwork on white, so keep them on white and
+   let the padding read as a mount rather than a glare. */
+:root[data-theme="dark"] .work .thumb {
+  background: #fff;
+  padding: 6px;
+}
+
+:root[data-theme="dark"] .card img.portrait { filter: brightness(0.94); }
+
+/* --- theme toggle ----------------------------------------------- */
+
+.theme-toggle {
+  margin-left: auto;         /* pins the control to the right of the bar */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 1px solid var(--purple-line);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--purple-dark);
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.theme-toggle:hover {
+  background: var(--purple-wash);
+  border-color: var(--purple-light);
+}
+
+.theme-toggle svg {
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Show the destination, not the current state: a moon while light. */
+.theme-toggle .icon-sun { display: none; }
+:root[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
+:root[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
 
 /* --- small screens --------------------------------------------- */
 
