@@ -5,12 +5,15 @@
 
 :root {
   --accent: #7e3b94;        /* headings, active nav, inline links */
+  --accent-deep: #440052;   /* inline link hover */
   --accent-soft: #b384c2;   /* button border + label, underlines */
   --accent-fill: #dbbee5;   /* button hover fill */
+  --accent-wash: rgba(126, 59, 148, 0.1);  /* nav + news link hover tint */
   --card-line: #f1e4f3;     /* card boundary */
   --ink: #000;
-  --ink-soft: rgba(0, 0, 0, 0.7);
-  --muted: #737373;
+  --ink-soft: rgba(0, 0, 0, 0.7); /* author lines */
+  --body-grey: #4c4c4c;           /* news copy, venues */
+  --muted: #737373;               /* sidebar meta, inactive nav */
   --rule: #e4e4e4;
   --bg: #fff;
   --sans: "Lato", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -33,8 +36,18 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-a { color: var(--accent); text-decoration: none; }
-a:hover { color: var(--accent-soft); }
+/* Links tint their own background at 10% on hover and darken, rather than
+   changing colour alone. */
+a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: color 0.15s, background-color 0.15s;
+}
+
+a:hover {
+  color: var(--accent-deep);
+  background-color: rgba(68, 0, 82, 0.1);
+}
 
 .wrap {
   max-width: var(--page);
@@ -71,7 +84,10 @@ a:hover { color: var(--accent-soft); }
   transition: color 0.2s;
 }
 
-.nav a:hover { color: var(--accent); }
+.nav a:hover {
+  color: var(--ink);
+  background-color: var(--accent-wash);
+}
 
 .nav a.active {
   color: var(--accent);
@@ -80,7 +96,7 @@ a:hover { color: var(--accent-soft); }
 
 .nav .home { display: inline-flex; align-items: center; color: var(--accent); margin-right: 4px; }
 .nav .home svg { width: 20px; height: 20px; }
-.nav .home:hover { color: var(--accent-soft); }
+.nav .home:hover { color: var(--accent-deep); background-color: transparent; }
 
 /* --- about ----------------------------------------------------- */
 
@@ -110,8 +126,8 @@ a:hover { color: var(--accent-soft); }
 }
 
 .card .role,
-.card .affil { font-style: italic; font-size: 15px; margin: 0; color: var(--ink); }
-.card .email { margin: 14px 0 18px; font-size: 15px; }
+.card .affil { font-style: italic; font-size: 15px; margin: 0; color: var(--muted); }
+.card .email { margin: 14px 0 18px; font-size: 15px; color: var(--muted); }
 
 .socials { display: flex; align-items: center; gap: 10px; }
 
@@ -182,7 +198,7 @@ a:hover { color: var(--accent-soft); }
 .news::-webkit-scrollbar { width: 6px; }
 .news::-webkit-scrollbar-thumb { background: var(--accent-soft); border-radius: 3px; }
 
-.news p { margin: 0 0 14px; }
+.news p { margin: 0 0 14px; color: var(--body-grey); line-height: 1.5; }
 .news .date { white-space: nowrap; }
 .news .kind { font-weight: 700; }
 .news .venue { font-style: italic; }
@@ -197,8 +213,8 @@ a:hover { color: var(--accent-soft); }
 }
 
 .news a:hover {
-  color: var(--accent);
-  text-decoration-color: var(--accent);
+  color: var(--ink);
+  background-color: var(--accent-wash);
 }
 
 /* --- works ----------------------------------------------------- */
@@ -213,14 +229,6 @@ a:hover { color: var(--accent-soft); }
   background: #fff;
   border: 1px solid var(--card-line);
   border-radius: 8px;
-  box-shadow: 0 1px 2px rgba(126, 59, 148, 0.04);
-  transition: box-shadow 0.25s, border-color 0.25s, transform 0.25s;
-}
-
-.work:hover {
-  border-color: var(--accent-soft);
-  box-shadow: 0 6px 20px rgba(126, 59, 148, 0.10);
-  transform: translateY(-2px);
 }
 
 /* The publications page lists entries without thumbnails. */
@@ -235,9 +243,6 @@ a:hover { color: var(--accent-soft); }
   line-height: 1.4;
 }
 
-.work h4 a { color: var(--ink); transition: color 0.2s; }
-.work h4 a:hover { color: var(--accent); }
-
 .work .authors { margin: 0 0 4px; font-size: 15px; color: var(--ink-soft); }
 
 .work .authors .me {
@@ -247,7 +252,7 @@ a:hover { color: var(--accent-soft); }
   text-underline-offset: 3px;
 }
 
-.work .venue { margin: 0 0 12px; font-size: 15px; font-style: italic; color: var(--ink-soft); }
+.work .venue { margin: 0 0 12px; font-size: 16px; font-style: italic; color: var(--body-grey); }
 .work .award { font-style: normal; color: var(--accent); }
 
 .work .links { display: flex; flex-wrap: wrap; gap: 10px; }
@@ -297,8 +302,9 @@ a:hover { color: var(--accent-soft); }
   border-top: 1px solid var(--rule);
   margin-top: 40px;
   padding: 24px 0 48px;
-  font-size: 13px;
-  color: var(--muted);
+  font-size: 16px;
+  font-weight: 300;
+  color: var(--ink);
 }
 
 /* --- small screens --------------------------------------------- */
