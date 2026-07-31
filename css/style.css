@@ -275,10 +275,13 @@ a:hover { color: var(--accent-soft); }
   color: #fff;
 }
 
+/* Sizes are 14px of drawing plus the 0.7 units of stroke padding baked into
+   each symbol's viewBox, so nothing clips at the edges. */
 .work .links svg {
   flex-shrink: 0;
-  width: 14px;
-  height: 14px;
+  width: 15.4px;
+  height: 15.4px;
+  overflow: visible;
   fill: none;
   stroke: currentColor;
   stroke-width: 1.2;
@@ -286,7 +289,7 @@ a:hover { color: var(--accent-soft); }
   stroke-linejoin: round;
 }
 
-.work .links svg.icon-code { height: 8px; }
+.work .links svg.icon-code { height: 9.4px; }
 
 /* --- footer ---------------------------------------------------- */
 
