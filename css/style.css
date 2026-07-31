@@ -1,24 +1,30 @@
 /* ---------------------------------------------------------------
    Jiayin Zhi — personal site
-   Colors, type and interaction states mirror the previous Framer build.
+
+   Every purple on the page comes from exactly two hues:
+     --purple-dark   strong purple  — headings, links, labels, glyphs
+     --purple-light  soft purple    — borders, underlines, rules
+   Anything softer than those is the dark hue at low alpha, so the
+   whole palette stays one family rather than drifting into new tints.
    --------------------------------------------------------------- */
 
 :root {
-  --accent: #7e3b94;        /* headings, active nav, inline links */
-  --accent-deep: #440052;   /* inline link hover */
-  --accent-soft: #b384c2;   /* button border + label, underlines */
-  --accent-fill: #dbbee5;   /* button hover fill */
-  --accent-wash: rgba(126, 59, 148, 0.1);  /* nav + news link hover tint */
-  --card-line: #f1e4f3;     /* card boundary */
+  --purple-dark: #7e3b94;
+  --purple-light: #b384c2;
+  --purple-wash: rgba(126, 59, 148, 0.10);   /* hover tint, category chips */
+  --purple-line: rgba(126, 59, 148, 0.13);   /* card boundary */
+  --purple-shadow: rgba(126, 59, 148, 0.04);
+  --purple-shadow-lift: rgba(126, 59, 148, 0.10);
+  --on-purple: #fff;                         /* text on a filled purple */
+
   --ink: #000;
-  --ink-soft: rgba(0, 0, 0, 0.7); /* author lines */
-  --body-grey: #4c4c4c;           /* news copy, venues */
-  --muted: #737373;               /* sidebar meta, inactive nav */
+  --ink-soft: rgba(0, 0, 0, 0.7);            /* author lines */
+  --body-grey: #4c4c4c;                      /* news copy, venues */
+  --muted: #737373;                          /* sidebar meta, inactive nav */
   --rule: #e4e4e4;
   --bg: #fff;
   --card-bg: #fff;
-  --card-shadow: rgba(126, 59, 148, 0.04);
-  --card-shadow-lift: rgba(126, 59, 148, 0.10);
+
   --sans: "Lato", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --serif: "Cormorant Garamond", Georgia, serif;
   --ui: "Instrument Sans", var(--sans);
@@ -39,18 +45,15 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Links tint their own background at 10% on hover and darken, rather than
-   changing colour alone. */
+/* Links keep their colour on hover and signal with a tint of the same
+   purple, so no second dark purple enters the palette. */
 a {
-  color: var(--accent);
+  color: var(--purple-dark);
   text-decoration: none;
   transition: color 0.15s, background-color 0.15s;
 }
 
-a:hover {
-  color: var(--accent-deep);
-  background-color: rgba(68, 0, 82, 0.1);
-}
+a:hover { background-color: var(--purple-wash); }
 
 .wrap {
   max-width: var(--page);
@@ -68,7 +71,7 @@ a:hover {
   z-index: 10;
   background: rgba(255, 255, 255, 0.94);
   backdrop-filter: saturate(180%) blur(8px);
-  border-top: 3px solid var(--accent-soft);
+  border-top: 3px solid var(--purple-light);
   border-bottom: 1px solid var(--rule);
 }
 
@@ -84,22 +87,22 @@ a:hover {
   font-weight: 400;
   letter-spacing: 0.03em;
   color: var(--muted);
-  transition: color 0.2s;
+  transition: color 0.2s, background-color 0.2s;
 }
 
 .nav a:hover {
   color: var(--ink);
-  background-color: var(--accent-wash);
+  background-color: var(--purple-wash);
 }
 
 .nav a.active {
-  color: var(--accent);
+  color: var(--purple-dark);
   font-weight: 700;
 }
 
-.nav .home { display: inline-flex; align-items: center; color: var(--accent); margin-right: 4px; }
+.nav .home { display: inline-flex; align-items: center; color: var(--purple-dark); margin-right: 4px; }
 .nav .home svg { width: 20px; height: 20px; }
-.nav .home:hover { color: var(--accent-deep); background-color: transparent; }
+.nav .home:hover { background-color: transparent; }
 
 /* --- about ----------------------------------------------------- */
 
@@ -124,7 +127,7 @@ a:hover {
   font-weight: 700;
   font-size: 30px;
   line-height: 1.1;
-  color: var(--accent);
+  color: var(--purple-dark);
   margin: 0 0 10px;
 }
 
@@ -136,11 +139,11 @@ a:hover {
 
 .socials a {
   display: inline-flex;
-  color: var(--accent);
-  transition: color 0.2s, transform 0.2s;
+  color: var(--purple-dark);
+  transition: transform 0.2s, background-color 0.2s;
 }
 
-.socials a:hover { color: var(--accent-soft); transform: translateY(-2px); }
+.socials a:hover { transform: translateY(-2px); background-color: transparent; }
 .socials svg { width: 20px; height: 20px; fill: currentColor; }
 .socials .sep { color: var(--rule); font-size: 15px; }
 
@@ -160,7 +163,7 @@ a:hover {
   position: absolute;
   left: 0;
   top: 0;
-  color: var(--accent);
+  color: var(--purple-dark);
   font-size: 17px;
 }
 
@@ -175,7 +178,7 @@ a:hover {
   font-weight: 400;
   font-size: 26px;
   letter-spacing: 0.02em;
-  color: var(--accent);
+  color: var(--purple-dark);
   margin: 0 0 20px;
 }
 
@@ -193,11 +196,11 @@ a:hover {
 /* --- news ------------------------------------------------------ */
 
 .news {
-  max-height: 232px;
+  max-height: 250px;
   overflow-y: auto;
   padding-right: 18px;
   scrollbar-width: thin;
-  scrollbar-color: var(--accent-soft) transparent;
+  scrollbar-color: var(--purple-light) transparent;
   /* Fade the bottom edge so a clipped line reads as "more below" rather than
      as the end of the list. Dropped once you have scrolled to the end. */
   -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 36px), transparent);
@@ -210,27 +213,57 @@ a:hover {
 }
 
 .news::-webkit-scrollbar { width: 4px; }
-.news::-webkit-scrollbar-thumb { background: var(--accent-soft); border-radius: 2px; }
+.news::-webkit-scrollbar-thumb { background: var(--purple-light); border-radius: 2px; }
 .news::-webkit-scrollbar-track { background: transparent; }
 
-.news p { margin: 0 0 14px; color: var(--body-grey); line-height: 1.5; }
-.news .date { white-space: nowrap; }
-.news .kind { font-weight: 700; }
+/* Date gets its own column so the entries line up; the category is a chip
+   rather than bracketed text. */
+.news p {
+  display: grid;
+  grid-template-columns: 58px 1fr;
+  gap: 0 16px;
+  align-items: baseline;
+  margin: 0 0 16px;
+  color: var(--body-grey);
+  line-height: 1.5;
+}
+
+.news .date {
+  font-size: 13px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.news .kind {
+  display: inline-block;
+  margin-right: 8px;
+  padding: 1px 9px 2px;
+  border-radius: 999px;
+  background: var(--purple-wash);
+  color: var(--purple-dark);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  vertical-align: 1px;
+}
+
 .news .venue { font-style: italic; }
 
 /* News links read as body text with a dashed purple rule, not as links. */
 .news a {
   color: var(--ink);
-  text-decoration: underline dashed var(--accent-soft);
+  text-decoration: underline dashed var(--purple-light);
   text-decoration-thickness: 1.5px;
   text-underline-offset: 4px;
-  transition: color 0.2s, text-decoration-color 0.2s;
+  transition: background-color 0.2s;
 }
 
-.news a:hover {
-  color: var(--ink);
-  background-color: var(--accent-wash);
-}
+.news a:hover { background-color: var(--purple-wash); }
 
 /* --- works ----------------------------------------------------- */
 
@@ -242,16 +275,16 @@ a:hover {
   padding: 24px 28px;
   margin-bottom: 16px;
   background: var(--card-bg);
-  border: 1px solid var(--card-line);
+  border: 1px solid var(--purple-line);
   border-radius: 8px;
-  box-shadow: 0 1px 2px var(--card-shadow);
+  box-shadow: 0 1px 2px var(--purple-shadow);
   transition: box-shadow 0.25s, border-color 0.25s, transform 0.25s;
 }
 
 /* Cards lift toward the reader and firm up their boundary on hover. */
 .work:hover {
-  border-color: var(--accent-soft);
-  box-shadow: 0 6px 20px var(--card-shadow-lift);
+  border-color: var(--purple-light);
+  box-shadow: 0 6px 20px var(--purple-shadow-lift);
   transform: translateY(-2px);
 }
 
@@ -271,13 +304,13 @@ a:hover {
 
 .work .authors .me {
   text-decoration: underline;
-  text-decoration-color: var(--accent-soft);
+  text-decoration-color: var(--purple-light);
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;
 }
 
 .work .venue { margin: 0 0 12px; font-size: 16px; font-style: italic; color: var(--body-grey); }
-.work .award { font-style: normal; color: var(--accent); }
+.work .award { font-style: normal; color: var(--purple-dark); }
 
 .work .links { display: flex; flex-wrap: wrap; gap: 10px; }
 
@@ -289,21 +322,22 @@ a:hover {
   min-width: 90px;
   height: 30px;
   padding: 0 12px;
-  background: #fff;
-  border: 1px solid var(--accent-soft);
+  background: transparent;
+  border: 1px solid var(--purple-light);
   border-radius: 8px;
   font-family: var(--ui);
   font-size: 14px;
   font-weight: 500;
-  /* Label and icon sit a shade darker than the border. The icons inherit
-     this through stroke: currentColor. */
-  color: var(--accent);
-  transition: background-color 0.2s, color 0.2s;
+  /* Label and icon are the strong purple; the icons inherit it through
+     stroke: currentColor. */
+  color: var(--purple-dark);
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
 }
 
 .work .links a:hover {
-  background: var(--accent-fill);
-  color: #fff;
+  background: var(--purple-dark);
+  border-color: var(--purple-dark);
+  color: var(--on-purple);
 }
 
 /* Sizes are 14px of drawing plus the 0.7 units of stroke padding baked into
@@ -338,12 +372,13 @@ a:hover {
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; }
   .work:hover { transform: none; }
+  .socials a:hover { transform: none; }
 }
 
 /* --- keyboard focus -------------------------------------------- */
 
 :focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--purple-dark);
   outline-offset: 3px;
   border-radius: 2px;
 }
@@ -352,12 +387,16 @@ a:hover {
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --accent: #c79ad9;
-    --accent-deep: #e6cef2;
-    --accent-soft: #b384c2;
-    --accent-fill: #7e3b94;
-    --accent-wash: rgba(199, 154, 217, 0.16);
-    --card-line: #382f42;
+    /* Same two roles, lifted for a dark ground: the strong purple carries
+       text, the soft purple stays behind it on borders. */
+    --purple-dark: #c79ad9;
+    --purple-light: #8f66a3;
+    --purple-wash: rgba(199, 154, 217, 0.16);
+    --purple-line: rgba(199, 154, 217, 0.18);
+    --purple-shadow: rgba(0, 0, 0, 0.35);
+    --purple-shadow-lift: rgba(0, 0, 0, 0.55);
+    --on-purple: #14101a;
+
     --ink: #ece8f0;
     --ink-soft: rgba(236, 232, 240, 0.72);
     --body-grey: #b6aec1;
@@ -365,13 +404,9 @@ a:hover {
     --rule: #2b2434;
     --bg: #14101a;
     --card-bg: #1b1622;
-    --card-shadow: rgba(0, 0, 0, 0.35);
-    --card-shadow-lift: rgba(0, 0, 0, 0.55);
   }
 
   .nav { background: rgba(20, 16, 26, 0.94); }
-
-  .work { background: var(--card-bg); }
 
   /* The paper thumbnails are artwork on white, so keep them on white and
      let the padding read as a mount rather than a glare. */
@@ -381,11 +416,6 @@ a:hover {
   }
 
   .card img.portrait { filter: brightness(0.94); }
-
-  .work .links a { background: transparent; }
-  .work .links a:hover { color: #fff; }
-
-  .news { mask-image: linear-gradient(to bottom, #000 calc(100% - 36px), transparent); }
 }
 
 /* --- small screens --------------------------------------------- */
@@ -402,4 +432,5 @@ a:hover {
 
   .nav .wrap { gap: 16px; overflow-x: auto; }
   .news { max-height: none; overflow: visible; padding-right: 0; }
+  .news p { grid-template-columns: 1fr; gap: 5px; }
 }
