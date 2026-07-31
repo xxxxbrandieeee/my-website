@@ -17,6 +17,8 @@
   --rule: #e4e4e4;
   --bg: #fff;
   --card-bg: #fff;
+  --card-shadow: rgba(126, 59, 148, 0.04);
+  --card-shadow-lift: rgba(126, 59, 148, 0.10);
   --sans: "Lato", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --serif: "Cormorant Garamond", Georgia, serif;
   --ui: "Instrument Sans", var(--sans);
@@ -242,6 +244,15 @@ a:hover {
   background: var(--card-bg);
   border: 1px solid var(--card-line);
   border-radius: 8px;
+  box-shadow: 0 1px 2px var(--card-shadow);
+  transition: box-shadow 0.25s, border-color 0.25s, transform 0.25s;
+}
+
+/* Cards lift toward the reader and firm up their boundary on hover. */
+.work:hover {
+  border-color: var(--accent-soft);
+  box-shadow: 0 6px 20px var(--card-shadow-lift);
+  transform: translateY(-2px);
 }
 
 /* The publications page lists entries without thumbnails. */
@@ -320,6 +331,13 @@ a:hover {
   color: var(--ink);
 }
 
+/* --- motion ----------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+  .work:hover { transform: none; }
+}
+
 /* --- keyboard focus -------------------------------------------- */
 
 :focus-visible {
@@ -345,6 +363,8 @@ a:hover {
     --rule: #2b2434;
     --bg: #14101a;
     --card-bg: #1b1622;
+    --card-shadow: rgba(0, 0, 0, 0.35);
+    --card-shadow-lift: rgba(0, 0, 0, 0.55);
   }
 
   .nav { background: rgba(20, 16, 26, 0.94); }
