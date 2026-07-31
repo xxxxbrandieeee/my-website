@@ -295,7 +295,9 @@ a:hover {
   font-family: var(--ui);
   font-size: 14px;
   font-weight: 500;
-  color: var(--accent-soft);
+  /* Label and icon sit a shade darker than the border. The icons inherit
+     this through stroke: currentColor. */
+  color: var(--accent);
   transition: background-color 0.2s, color 0.2s;
 }
 
