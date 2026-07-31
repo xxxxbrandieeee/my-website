@@ -1,21 +1,23 @@
 /* ---------------------------------------------------------------
    Jiayin Zhi — personal site
 
-   Every purple on the page comes from exactly two hues:
-     --purple-dark   strong purple  — headings, links, labels, glyphs
-     --purple-light  soft purple    — borders, underlines, rules
-   Anything softer than those is the dark hue at low alpha, so the
-   whole palette stays one family rather than drifting into new tints.
+   Every accent on the page comes from exactly two hues:
+     --accent-strong   headings, links, labels, glyphs
+     --accent-soft     borders, underlines, rules
+   Anything softer is the strong hue at low alpha, so the palette stays
+   one family rather than drifting into new tints. Retheming the site is
+   therefore a matter of changing the values in :root and the matching
+   rgba() tints — nothing else references a colour literal.
    --------------------------------------------------------------- */
 
 :root {
-  --purple-dark: #7e3b94;
-  --purple-light: #b384c2;
-  --purple-wash: rgba(126, 59, 148, 0.10);   /* hover tint, category chips */
-  --purple-line: rgba(126, 59, 148, 0.13);   /* card boundary */
-  --purple-shadow: rgba(126, 59, 148, 0.04);
-  --purple-shadow-lift: rgba(126, 59, 148, 0.10);
-  --on-purple: #fff;                         /* text on a filled purple */
+  --accent-strong: #7e3b94;
+  --accent-soft: #b384c2;
+  --accent-wash: rgba(126, 59, 148, 0.10);   /* hover tint, category chips */
+  --accent-line: rgba(126, 59, 148, 0.13);   /* card boundary */
+  --accent-shadow: rgba(126, 59, 148, 0.04);
+  --accent-shadow-lift: rgba(126, 59, 148, 0.10);
+  --on-accent: #fff;                         /* text on a filled purple */
 
   --ink: #000;
   --ink-soft: rgba(0, 0, 0, 0.7);            /* author lines */
@@ -24,6 +26,7 @@
   --rule: #e4e4e4;
   --bg: #fff;
   --card-bg: #fff;
+  --thumb-bg: #faf9fb;
 
   --sans: "Lato", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --serif: "Cormorant Garamond", Georgia, serif;
@@ -48,12 +51,12 @@ body {
 /* Links keep their colour on hover and signal with a tint of the same
    purple, so no second dark purple enters the palette. */
 a {
-  color: var(--purple-dark);
+  color: var(--accent-strong);
   text-decoration: none;
   transition: color 0.15s, background-color 0.15s;
 }
 
-a:hover { background-color: var(--purple-wash); }
+a:hover { background-color: var(--accent-wash); }
 
 .wrap {
   max-width: var(--page);
@@ -71,7 +74,7 @@ a:hover { background-color: var(--purple-wash); }
   z-index: 10;
   background: rgba(255, 255, 255, 0.94);
   backdrop-filter: saturate(180%) blur(8px);
-  border-top: 3px solid var(--purple-light);
+  border-top: 3px solid var(--accent-soft);
   border-bottom: 1px solid var(--rule);
 }
 
@@ -92,15 +95,15 @@ a:hover { background-color: var(--purple-wash); }
 
 .nav a:hover {
   color: var(--ink);
-  background-color: var(--purple-wash);
+  background-color: var(--accent-wash);
 }
 
 .nav a.active {
-  color: var(--purple-dark);
+  color: var(--accent-strong);
   font-weight: 700;
 }
 
-.nav .home { display: inline-flex; align-items: center; color: var(--purple-dark); margin-right: 4px; }
+.nav .home { display: inline-flex; align-items: center; color: var(--accent-strong); margin-right: 4px; }
 .nav .home svg { width: 20px; height: 20px; }
 .nav .home:hover { background-color: transparent; }
 
@@ -127,19 +130,37 @@ a:hover { background-color: var(--purple-wash); }
   font-weight: 700;
   font-size: 30px;
   line-height: 1.1;
-  color: var(--purple-dark);
+  color: var(--accent-strong);
   margin: 0 0 10px;
 }
 
 .card .role,
 .card .affil { font-style: italic; font-size: 15px; margin: 0; color: var(--muted); }
-.card .email { margin: 14px 0 18px; font-size: 15px; color: var(--muted); }
+.card .email {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 14px 0 18px;
+  font-size: 15px;
+  color: var(--muted);
+}
+
+.card .email .mail {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  fill: none;
+  stroke: var(--accent-strong);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
 
 .socials { display: flex; align-items: center; gap: 10px; }
 
 .socials a {
   display: inline-flex;
-  color: var(--purple-dark);
+  color: var(--accent-strong);
   transition: transform 0.2s, background-color 0.2s;
 }
 
@@ -163,7 +184,7 @@ a:hover { background-color: var(--purple-wash); }
   position: absolute;
   left: 0;
   top: 0;
-  color: var(--purple-dark);
+  color: var(--accent-strong);
   font-size: 17px;
 }
 
@@ -178,7 +199,7 @@ a:hover { background-color: var(--purple-wash); }
   font-weight: 400;
   font-size: 26px;
   letter-spacing: 0.02em;
-  color: var(--purple-dark);
+  color: var(--accent-strong);
   margin: 0 0 20px;
 }
 
@@ -200,7 +221,7 @@ a:hover { background-color: var(--purple-wash); }
   overflow-y: auto;
   padding-right: 18px;
   scrollbar-width: thin;
-  scrollbar-color: var(--purple-light) transparent;
+  scrollbar-color: var(--accent-soft) transparent;
   /* Fade the bottom edge so a clipped line reads as "more below" rather than
      as the end of the list. Dropped once you have scrolled to the end. */
   -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 36px), transparent);
@@ -213,7 +234,7 @@ a:hover { background-color: var(--purple-wash); }
 }
 
 .news::-webkit-scrollbar { width: 4px; }
-.news::-webkit-scrollbar-thumb { background: var(--purple-light); border-radius: 2px; }
+.news::-webkit-scrollbar-thumb { background: var(--accent-soft); border-radius: 2px; }
 .news::-webkit-scrollbar-track { background: transparent; }
 
 /* Date gets its own column so the entries line up; the category is a chip
@@ -237,14 +258,17 @@ a:hover { background-color: var(--purple-wash); }
   white-space: nowrap;
 }
 
-.news .kind {
+/* Shared chip: news categories and the award marker. */
+.news .kind,
+.work .award {
   display: inline-block;
-  margin-right: 8px;
   padding: 1px 9px 2px;
   border-radius: 999px;
-  background: var(--purple-wash);
-  color: var(--purple-dark);
+  background: var(--accent-wash);
+  color: var(--accent-strong);
+  font-family: var(--sans);
   font-size: 11px;
+  font-style: normal;
   font-weight: 700;
   letter-spacing: 0.07em;
   text-transform: uppercase;
@@ -252,18 +276,20 @@ a:hover { background-color: var(--purple-wash); }
   vertical-align: 1px;
 }
 
+.news .kind { margin-right: 8px; }
+
 .news .venue { font-style: italic; }
 
-/* News links read as body text with a dashed purple rule, not as links. */
+/* News links read as body text with a dashed rule, not as links. */
 .news a {
   color: var(--ink);
-  text-decoration: underline dashed var(--purple-light);
+  text-decoration: underline dashed var(--accent-soft);
   text-decoration-thickness: 1.5px;
   text-underline-offset: 4px;
   transition: background-color 0.2s;
 }
 
-.news a:hover { background-color: var(--purple-wash); }
+.news a:hover { background-color: var(--accent-wash); }
 
 /* --- works ----------------------------------------------------- */
 
@@ -275,23 +301,34 @@ a:hover { background-color: var(--purple-wash); }
   padding: 24px 28px;
   margin-bottom: 16px;
   background: var(--card-bg);
-  border: 1px solid var(--purple-line);
+  border: 1px solid var(--accent-line);
   border-radius: 8px;
-  box-shadow: 0 1px 2px var(--purple-shadow);
+  box-shadow: 0 1px 2px var(--accent-shadow);
   transition: box-shadow 0.25s, border-color 0.25s, transform 0.25s;
 }
 
 /* Cards lift toward the reader and firm up their boundary on hover. */
 .work:hover {
-  border-color: var(--purple-light);
-  box-shadow: 0 6px 20px var(--purple-shadow-lift);
+  border-color: var(--accent-soft);
+  box-shadow: 0 6px 20px var(--accent-shadow-lift);
   transform: translateY(-2px);
 }
 
 /* The publications page lists entries without thumbnails. */
 .work.no-thumb { grid-template-columns: 1fr; }
 
-.work .thumb { width: 100%; border-radius: 4px; display: block; }
+/* Thumbnails range from wide banners to squares. A fixed-ratio mount with
+   the figure contained inside keeps the column regular without cropping
+   anything out of a research figure. */
+.work .thumb {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: contain;
+  background: var(--thumb-bg);
+  border-radius: 4px;
+  padding: 8px;
+}
 
 .work h4 {
   font-size: 16px;
@@ -304,13 +341,13 @@ a:hover { background-color: var(--purple-wash); }
 
 .work .authors .me {
   text-decoration: underline;
-  text-decoration-color: var(--purple-light);
+  text-decoration-color: var(--accent-soft);
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;
 }
 
 .work .venue { margin: 0 0 12px; font-size: 16px; font-style: italic; color: var(--body-grey); }
-.work .award { font-style: normal; color: var(--purple-dark); }
+.work .award { font-style: normal; color: var(--accent-strong); }
 
 .work .links { display: flex; flex-wrap: wrap; gap: 10px; }
 
@@ -323,21 +360,21 @@ a:hover { background-color: var(--purple-wash); }
   height: 30px;
   padding: 0 12px;
   background: transparent;
-  border: 1px solid var(--purple-light);
+  border: 1px solid var(--accent-soft);
   border-radius: 8px;
   font-family: var(--ui);
   font-size: 14px;
   font-weight: 500;
   /* Label and icon are the strong purple; the icons inherit it through
      stroke: currentColor. */
-  color: var(--purple-dark);
+  color: var(--accent-strong);
   transition: background-color 0.2s, color 0.2s, border-color 0.2s;
 }
 
 .work .links a:hover {
-  background: var(--purple-dark);
-  border-color: var(--purple-dark);
-  color: var(--on-purple);
+  background: var(--accent-strong);
+  border-color: var(--accent-strong);
+  color: var(--on-accent);
 }
 
 /* Sizes are 14px of drawing plus the 0.7 units of stroke padding baked into
@@ -378,9 +415,77 @@ a:hover { background-color: var(--purple-wash); }
 /* --- keyboard focus -------------------------------------------- */
 
 :focus-visible {
-  outline: 2px solid var(--purple-dark);
+  outline: 2px solid var(--accent-strong);
   outline-offset: 3px;
   border-radius: 2px;
+}
+
+/* Off-screen until the first Tab press, then drops into the top-left. */
+.skip-link {
+  position: absolute;
+  left: 12px;
+  top: -60px;
+  z-index: 20;
+  padding: 9px 16px;
+  background: var(--accent-strong);
+  color: var(--on-accent);
+  border-radius: 0 0 8px 8px;
+  font-size: 14px;
+  font-weight: 700;
+  transition: top 0.15s;
+}
+
+.skip-link:focus {
+  top: 0;
+  background: var(--accent-strong);
+  color: var(--on-accent);
+}
+
+/* --- print ------------------------------------------------------ */
+
+@media print {
+  :root { --accent-strong: #000; --accent-soft: #999; }
+
+  .nav, .theme-toggle, .skip-link { display: none; }
+
+  body { font-size: 11pt; background: #fff; color: #000; }
+
+  .wrap { max-width: none; padding: 0; }
+
+  /* Nothing should stay hidden inside a scroll area on paper. */
+  .news {
+    max-height: none;
+    overflow: visible;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .work {
+    border: 1px solid #ccc;
+    box-shadow: none;
+    break-inside: avoid;
+  }
+
+  .section { padding: 12px 0; }
+
+  /* Links lose their href on paper unless it is spelled out. */
+  .bio a::after,
+  .news a::after {
+    content: " (" attr(href) ")";
+    font-size: 9pt;
+    color: #555;
+    word-break: break-all;
+  }
+
+  .work .links a::after {
+    content: " " attr(href);
+    font-size: 8pt;
+    color: #555;
+    word-break: break-all;
+  }
+
+  .work .links { display: block; }
+  .work .links a { display: block; min-width: 0; height: auto; border: none; padding: 0; }
 }
 
 /* --- dark mode -------------------------------------------------- */
@@ -392,13 +497,13 @@ a:hover { background-color: var(--purple-wash); }
 :root[data-theme="dark"] {
   /* Same two roles, lifted for a dark ground: the strong purple carries
      text, the soft purple stays behind it on borders. */
-  --purple-dark: #c79ad9;
-  --purple-light: #8f66a3;
-  --purple-wash: rgba(199, 154, 217, 0.16);
-  --purple-line: rgba(199, 154, 217, 0.18);
-  --purple-shadow: rgba(0, 0, 0, 0.35);
-  --purple-shadow-lift: rgba(0, 0, 0, 0.55);
-  --on-purple: #14101a;
+  --accent-strong: #c79ad9;
+  --accent-soft: #8f66a3;
+  --accent-wash: rgba(199, 154, 217, 0.16);
+  --accent-line: rgba(199, 154, 217, 0.18);
+  --accent-shadow: rgba(0, 0, 0, 0.35);
+  --accent-shadow-lift: rgba(0, 0, 0, 0.55);
+  --on-accent: #14101a;
 
   --ink: #ece8f0;
   --ink-soft: rgba(236, 232, 240, 0.72);
@@ -411,12 +516,9 @@ a:hover { background-color: var(--purple-wash); }
 
 :root[data-theme="dark"] .nav { background: rgba(20, 16, 26, 0.94); }
 
-/* The paper thumbnails are artwork on white, so keep them on white and
-   let the padding read as a mount rather than a glare. */
-:root[data-theme="dark"] .work .thumb {
-  background: #fff;
-  padding: 6px;
-}
+/* The paper thumbnails are artwork on white, so keep their mount white on
+   a dark ground rather than letting the figures glare. */
+:root[data-theme="dark"] { --thumb-bg: #fff; }
 
 :root[data-theme="dark"] .card img.portrait { filter: brightness(0.94); }
 
@@ -430,17 +532,17 @@ a:hover { background-color: var(--purple-wash); }
   width: 34px;
   height: 34px;
   padding: 0;
-  border: 1px solid var(--purple-line);
+  border: 1px solid var(--accent-line);
   border-radius: 8px;
   background: transparent;
-  color: var(--purple-dark);
+  color: var(--accent-strong);
   cursor: pointer;
   transition: background-color 0.2s, border-color 0.2s;
 }
 
 .theme-toggle:hover {
-  background: var(--purple-wash);
-  border-color: var(--purple-light);
+  background: var(--accent-wash);
+  border-color: var(--accent-soft);
 }
 
 .theme-toggle svg {
@@ -465,6 +567,7 @@ a:hover { background-color: var(--purple-wash); }
   .card { text-align: center; }
   .card img.portrait { margin-left: auto; margin-right: auto; }
   .socials { justify-content: center; }
+  .card .email { justify-content: center; }
 
   .work { grid-template-columns: 1fr; gap: 16px; padding: 20px; }
   .work .thumb { max-width: 240px; }
