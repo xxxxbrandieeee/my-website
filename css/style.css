@@ -1,17 +1,21 @@
 /* ---------------------------------------------------------------
    Jiayin Zhi — personal site
-   Palette and type mirror the previous Framer build.
+   Colors, type and interaction states mirror the previous Framer build.
    --------------------------------------------------------------- */
 
 :root {
-  --accent: #7e3b94;
-  --accent-soft: #a06fb4;
+  --accent: #7e3b94;        /* headings, active nav, inline links */
+  --accent-soft: #b384c2;   /* button border + label, underlines */
+  --accent-fill: #dbbee5;   /* button hover fill */
+  --card-line: #f1e4f3;     /* card boundary */
   --ink: #000;
-  --muted: #6b6b6b;
+  --ink-soft: rgba(0, 0, 0, 0.7);
+  --muted: #737373;
   --rule: #e4e4e4;
   --bg: #fff;
   --sans: "Lato", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --serif: "Cormorant Garamond", Georgia, serif;
+  --ui: "Instrument Sans", var(--sans);
   --page: 980px;
 }
 
@@ -30,13 +34,15 @@ body {
 }
 
 a { color: var(--accent); text-decoration: none; }
-a:hover { text-decoration: underline; }
+a:hover { color: var(--accent-soft); }
 
 .wrap {
   max-width: var(--page);
   margin: 0 auto;
   padding: 0 28px;
 }
+
+.sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
 
 /* --- top navigation ------------------------------------------- */
 
@@ -59,22 +65,22 @@ a:hover { text-decoration: underline; }
 
 .nav a {
   font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
+  font-weight: 400;
+  letter-spacing: 0.03em;
   color: var(--muted);
+  transition: color 0.2s;
 }
 
-.nav a:hover { color: var(--accent); text-decoration: none; }
-.nav a.active { color: var(--accent); }
+.nav a:hover { color: var(--accent); }
 
-.nav .home {
-  display: inline-flex;
-  align-items: center;
+.nav a.active {
   color: var(--accent);
-  margin-right: 4px;
+  font-weight: 700;
 }
 
+.nav .home { display: inline-flex; align-items: center; color: var(--accent); margin-right: 4px; }
 .nav .home svg { width: 20px; height: 20px; }
+.nav .home:hover { color: var(--accent-soft); }
 
 /* --- about ----------------------------------------------------- */
 
@@ -104,40 +110,23 @@ a:hover { text-decoration: underline; }
 }
 
 .card .role,
-.card .affil {
-  font-style: italic;
-  font-size: 15px;
-  margin: 0;
-  color: var(--ink);
-}
+.card .affil { font-style: italic; font-size: 15px; margin: 0; color: var(--ink); }
+.card .email { margin: 14px 0 18px; font-size: 15px; }
 
-.card .email {
-  margin: 14px 0 18px;
-  font-size: 15px;
-}
-
-.socials {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
+.socials { display: flex; align-items: center; gap: 10px; }
 
 .socials a {
   display: inline-flex;
   color: var(--accent);
+  transition: color 0.2s, transform 0.2s;
 }
 
-.socials a:hover { color: var(--accent-soft); }
+.socials a:hover { color: var(--accent-soft); transform: translateY(-2px); }
 .socials svg { width: 20px; height: 20px; fill: currentColor; }
 .socials .sep { color: var(--rule); font-size: 15px; }
 
 .bio p { margin: 0 0 18px; }
-
-.bio ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
+.bio ul { list-style: none; padding: 0; margin: 0; }
 
 .bio li {
   position: relative;
@@ -159,6 +148,9 @@ a:hover { text-decoration: underline; }
 .section { padding: 34px 0; }
 
 .section > h2 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   font-weight: 400;
   font-size: 26px;
   letter-spacing: 0.02em;
@@ -166,18 +158,21 @@ a:hover { text-decoration: underline; }
   margin: 0 0 20px;
 }
 
-.section > h3 {
-  font-weight: 700;
-  font-size: 16px;
-  letter-spacing: 0.08em;
-  color: var(--accent);
-  margin: 34px 0 16px;
+.section > h2 svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex-shrink: 0;
 }
 
 /* --- news ------------------------------------------------------ */
 
 .news {
-  max-height: 340px;
+  max-height: 232px;
   overflow-y: auto;
   padding-right: 18px;
   scrollbar-width: thin;
@@ -192,62 +187,106 @@ a:hover { text-decoration: underline; }
 .news .kind { font-weight: 700; }
 .news .venue { font-style: italic; }
 
+/* News links read as body text with a dashed purple rule, not as links. */
+.news a {
+  color: var(--ink);
+  text-decoration: underline dashed var(--accent-soft);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 4px;
+  transition: color 0.2s, text-decoration-color 0.2s;
+}
+
+.news a:hover {
+  color: var(--accent);
+  text-decoration-color: var(--accent);
+}
+
 /* --- works ----------------------------------------------------- */
 
 .work {
   display: grid;
-  grid-template-columns: 150px 1fr;
-  gap: 26px;
-  align-items: start;
-  padding: 18px 0;
-  border-bottom: 1px solid var(--rule);
+  grid-template-columns: 170px 1fr;
+  gap: 30px;
+  align-items: center;
+  padding: 24px 28px;
+  margin-bottom: 22px;
+  background: #fff;
+  border: 1px solid var(--card-line);
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(126, 59, 148, 0.04);
+  transition: box-shadow 0.25s, border-color 0.25s, transform 0.25s;
 }
 
-.work:last-child { border-bottom: none; }
-
-.work .thumb {
-  width: 100%;
-  border-radius: 3px;
-  display: block;
-  border: 1px solid var(--rule);
+.work:hover {
+  border-color: var(--accent-soft);
+  box-shadow: 0 6px 20px rgba(126, 59, 148, 0.10);
+  transform: translateY(-2px);
 }
+
+/* The publications page lists entries without thumbnails. */
+.work.no-thumb { grid-template-columns: 1fr; }
+
+.work .thumb { width: 100%; border-radius: 4px; display: block; }
 
 .work h4 {
   font-size: 16px;
-  font-weight: 700;
-  margin: 0 0 6px;
+  font-weight: 400;
+  margin: 0 0 8px;
   line-height: 1.4;
 }
 
-.work h4 a { color: var(--ink); }
+.work h4 a { color: var(--ink); transition: color 0.2s; }
 .work h4 a:hover { color: var(--accent); }
 
-.work .authors { margin: 0 0 4px; font-size: 15px; }
-.work .authors .me { font-weight: 700; }
-.work .venue { margin: 0 0 8px; font-size: 15px; font-style: italic; color: var(--muted); }
-.work .award { font-style: normal; color: var(--accent); font-weight: 700; }
+.work .authors { margin: 0 0 4px; font-size: 15px; color: var(--ink-soft); }
 
-.work .links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+.work .authors .me {
+  text-decoration: underline;
+  text-decoration-color: var(--accent-soft);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
 }
 
+.work .venue { margin: 0 0 12px; font-size: 15px; font-style: italic; color: var(--ink-soft); }
+.work .award { font-style: normal; color: var(--accent); }
+
+.work .links { display: flex; flex-wrap: wrap; gap: 10px; }
+
 .work .links a {
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.03em;
-  padding: 2px 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 90px;
+  height: 30px;
+  padding: 0 12px;
+  background: #fff;
   border: 1px solid var(--accent-soft);
-  border-radius: 999px;
+  border-radius: 8px;
+  font-family: var(--ui);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--accent-soft);
+  transition: background-color 0.2s, color 0.2s;
 }
 
 .work .links a:hover {
-  background: var(--accent);
+  background: var(--accent-fill);
   color: #fff;
-  border-color: var(--accent);
-  text-decoration: none;
 }
+
+.work .links svg {
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.work .links svg.icon-code { height: 8px; }
 
 /* --- footer ---------------------------------------------------- */
 
@@ -262,22 +301,14 @@ a:hover { text-decoration: underline; }
 /* --- small screens --------------------------------------------- */
 
 @media (max-width: 760px) {
-  .about {
-    grid-template-columns: 1fr;
-    gap: 30px;
-    padding-top: 36px;
-  }
-
+  .about { grid-template-columns: 1fr; gap: 30px; padding-top: 36px; }
   .card { text-align: center; }
   .card img.portrait { margin-left: auto; margin-right: auto; }
   .socials { justify-content: center; }
 
-  .work {
-    grid-template-columns: 1fr;
-    gap: 14px;
-  }
-
+  .work { grid-template-columns: 1fr; gap: 16px; padding: 20px; }
   .work .thumb { max-width: 240px; }
+  .work:hover { transform: none; }
 
   .nav .wrap { gap: 16px; overflow-x: auto; }
   .news { max-height: none; overflow: visible; padding-right: 0; }
