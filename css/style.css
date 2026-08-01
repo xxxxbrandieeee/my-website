@@ -150,8 +150,8 @@ a:hover {
    start is what leaves the column room to stick in. */
 .layout {
   display: grid;
-  grid-template-columns: 260px 1fr;
-  gap: 56px;
+  grid-template-columns: 240px 1fr;
+  gap: 36px;
   align-items: start;
   padding: 58px 0 12px;
 }
