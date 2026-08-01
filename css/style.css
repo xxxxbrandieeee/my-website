@@ -33,11 +33,19 @@
   --sans: "Lato", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --serif: "Cormorant Garamond", Georgia, serif;
   --ui: "Instrument Sans", var(--sans);
-  --page: 980px;
+  /* Wider than the original, because the sidebar now holds its column for
+     the whole page rather than only alongside the bio. */
+  --page: 1120px;
   --hang: 96px;   /* news category slot; must clear the longest word */
 }
 
 * { box-sizing: border-box; }
+
+/* Selecting text is marking it, so it gets the highlighter too. */
+::selection {
+  background: var(--accent-wash);
+  color: var(--on-wash);
+}
 
 html { scroll-behavior: smooth; scroll-padding-top: 90px; }
 
@@ -137,12 +145,23 @@ a:hover {
 
 /* --- about ----------------------------------------------------- */
 
-.about {
+/* The sidebar is a sibling of every section rather than of the bio alone,
+   so it can stay in view while news and works scroll past. align-items:
+   start is what leaves the column room to stick in. */
+.layout {
   display: grid;
   grid-template-columns: 260px 1fr;
   gap: 56px;
+  align-items: start;
   padding: 58px 0 12px;
 }
+
+.card {
+  position: sticky;
+  top: 82px;
+}
+
+.bio { padding-bottom: 8px; }
 
 .card img.portrait {
   width: 200px;
@@ -396,7 +415,21 @@ a:hover {
   text-underline-offset: 3px;
 }
 
-.work .venue { margin: 0 0 12px; font-size: 16px; font-style: italic; color: var(--body-grey); }
+/* The venue is what people look for first in a publication list, so it is
+   set in the display face rather than as italic body text. */
+.work .venue {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 2px 0 12px;
+  font-family: var(--serif);
+  font-size: 19px;
+  font-weight: 600;
+  font-style: normal;
+  letter-spacing: 0.01em;
+  color: var(--ink);
+}
 
 .work .links { display: flex; flex-wrap: wrap; gap: 10px; }
 
@@ -634,8 +667,11 @@ a:hover {
 /* --- small screens --------------------------------------------- */
 
 @media (max-width: 760px) {
-  .about { grid-template-columns: 1fr; gap: 30px; padding-top: 36px; }
-  .card { text-align: center; }
+  .layout { grid-template-columns: 1fr; gap: 30px; padding-top: 36px; }
+
+  /* No room alongside the content, so the sidebar goes back to being a
+     header rather than a rail. */
+  .card { position: static; text-align: center; }
   .card img.portrait { margin-left: auto; margin-right: auto; }
   .socials { justify-content: center; }
   .card .email { justify-content: center; }
