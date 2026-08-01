@@ -163,9 +163,10 @@ a:hover {
 
 .bio { padding-bottom: 8px; }
 
+/* Narrower than the column, and left-aligned within it. */
 .card img.portrait {
-  width: 200px;
-  height: 200px;
+  width: 164px;
+  height: 164px;
   border-radius: 50%;
   object-fit: cover;
   display: block;
