@@ -435,6 +435,22 @@
   window.addEventListener('resize', onScroll);
   frame();
 })();
+
+// The news list is a scroll container sitting in the middle of the page, so
+// a wheel over it would otherwise trap the page scroll until the list ran
+// out. Pass the wheel through to the window and leave the list to its own
+// scrollbar, which is why that bar is drawn wide and always visible.
+(function () {
+  var news = document.querySelector('.news');
+  if (!news) return;
+
+  news.addEventListener('wheel', function (e) {
+    if (news.scrollHeight <= news.clientHeight) return;   // not scrollable
+    if (e.ctrlKey) return;                                // pinch-zoom
+    e.preventDefault();
+    window.scrollBy({ top: e.deltaY, left: 0, behavior: 'instant' });
+  }, { passive: false });
+})();
 </script>
 
 </body>

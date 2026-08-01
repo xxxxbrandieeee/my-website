@@ -215,8 +215,8 @@ a:hover {
 .socials svg { width: 20px; height: 20px; fill: currentColor; }
 .socials .sep { color: var(--rule); font-size: 15px; }
 
-/* Cap the measure so the bio does not run to 100+ characters on wide screens. */
-.bio { max-width: 64ch; }
+/* No measure cap: the bio shares the content column with news and works, and
+   a narrower paragraph read as a misalignment rather than as good typography. */
 .bio p { margin: 0 0 18px; }
 .bio ul { list-style: none; padding: 0; margin: 0; }
 
@@ -265,10 +265,12 @@ a:hover {
 
 .news {
   max-height: 250px;
-  overflow-y: auto;
-  padding-right: 18px;
-  scrollbar-width: thin;
-  scrollbar-color: var(--accent-soft) transparent;
+  /* Always show the bar, not just while scrolling: the wheel is passed
+     through to the page, so the bar is the only affordance left. */
+  overflow-y: scroll;
+  padding-right: 22px;
+  scrollbar-width: auto;
+  scrollbar-color: var(--accent-soft) var(--accent-line);
   /* Fade the bottom edge so a clipped line reads as "more below" rather than
      as the end of the list. Dropped once you have scrolled to the end. */
   -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 36px), transparent);
@@ -280,9 +282,24 @@ a:hover {
   mask-image: none;
 }
 
-.news::-webkit-scrollbar { width: 4px; }
-.news::-webkit-scrollbar-thumb { background: var(--accent-soft); border-radius: 2px; }
-.news::-webkit-scrollbar-track { background: transparent; }
+.news::-webkit-scrollbar { width: 12px; }
+
+.news::-webkit-scrollbar-track {
+  background: var(--accent-line);
+  border-radius: 6px;
+}
+
+.news::-webkit-scrollbar-thumb {
+  background: var(--accent-soft);
+  border-radius: 6px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.news::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-strong);
+  background-clip: padding-box;
+}
 
 /* Date gets its own column so the entries line up; the category is a chip
    rather than bracketed text. */
@@ -316,7 +333,10 @@ a:hover {
 
 .news .kind {
   display: inline-block;
-  width: calc(var(--hang) - 8px);
+  /* Exactly --hang, so text following the category starts at the same x as
+     the wrapped lines hanging beneath it. Anything less and the first line
+     sits proud of the rest by the difference. */
+  width: var(--hang);
   text-indent: 0;
   font-family: var(--sans);
   font-size: 10.5px;
@@ -415,20 +435,15 @@ a:hover {
   text-underline-offset: 3px;
 }
 
-/* The venue is what people look for first in a publication list, so it is
-   set in the display face rather than as italic body text. */
 .work .venue {
   display: flex;
   align-items: baseline;
   flex-wrap: wrap;
   gap: 10px;
-  margin: 2px 0 12px;
-  font-family: var(--serif);
-  font-size: 19px;
-  font-weight: 600;
-  font-style: normal;
-  letter-spacing: 0.01em;
-  color: var(--ink);
+  margin: 0 0 12px;
+  font-size: 16px;
+  font-style: italic;
+  color: var(--body-grey);
 }
 
 .work .links { display: flex; flex-wrap: wrap; gap: 10px; }
