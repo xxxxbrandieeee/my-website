@@ -288,74 +288,75 @@ a:hover {
 
 /* --- the news rail ---------------------------------------------- */
 
-/* Rather than a generic bar, the scroller is a scale: one tick per entry,
-   a longer tick where the year turns, and a highlighter stroke for the
-   thumb — the same yellow that marks anything else on the page. It reads
-   as a measure of how much news there is and where you are in it. */
+/* The scroller is a spine rather than a bar: a thin rule that fills purple
+   behind you as you read, with a single marker at the head. */
 
 .news-scroll { position: relative; }
 
 .rail {
   position: absolute;
-  top: 2px;
-  bottom: 2px;
-  right: 6px;
+  top: 12px;
+  bottom: 30px;      /* clear of the fade at the foot of the list */
+  right: 8px;
   width: 30px;
   cursor: pointer;
   -webkit-user-select: none;
   user-select: none;
 }
 
-.rail-line {
+.rail-line,
+.rail .fill {
   position: absolute;
+  left: 13px;
+  width: 4px;
+  border-radius: 2px;
+}
+
+.rail-line {
   top: 0;
   bottom: 0;
-  left: 21px;
-  width: 1px;
   background: var(--accent-line);
 }
 
-.rail .tick {
-  position: absolute;
-  left: 21px;
-  width: 6px;
-  height: 1px;
-  background: var(--accent-soft);
-  opacity: 0.7;
-}
-
-/* Where the year turns, the tick runs long and carries the year. */
-.rail .tick.year {
-  width: 10px;
-  opacity: 1;
+.rail .fill {
+  top: 0;
   background: var(--accent-strong);
+  opacity: 0.5;
 }
 
-.rail .tick.year::before {
-  content: attr(data-year);
-  position: absolute;
-  right: 12px;
-  top: -6px;
-  font-family: var(--ui);
-  font-size: 9px;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 0.06em;
-  color: var(--muted);
-}
-
+/* Big enough to read as a handle, ringed in the page colour so it sits on
+   top of the rule rather than in it. */
 .rail .thumb {
   position: absolute;
-  left: 15px;
-  width: 13px;
-  min-height: 22px;
-  border-radius: 2px;
-  background: var(--marker);
+  left: 2px;
+  width: 26px;
+  height: 26px;
+  margin-top: -13px;
+  border-radius: 50%;
+  background: var(--marker-strong);
+  box-shadow: 0 0 0 4px var(--bg), 0 1px 3px var(--accent-shadow-lift);
   cursor: grab;
-  transition: background-color 0.15s;
+  transition: transform 0.15s ease-out;
 }
 
-.rail:hover .thumb { background: var(--marker-strong); }
-.rail .thumb.grabbing { background: var(--marker-strong); cursor: grabbing; }
+/* Three grip lines, so it reads as something to take hold of. */
+.rail .thumb::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 9px;
+  height: 7px;
+  margin: -3.5px 0 0 -4.5px;
+  background:
+    linear-gradient(var(--accent-strong), var(--accent-strong)) 0 0 / 100% 1px no-repeat,
+    linear-gradient(var(--accent-strong), var(--accent-strong)) 0 3px / 100% 1px no-repeat,
+    linear-gradient(var(--accent-strong), var(--accent-strong)) 0 6px / 100% 1px no-repeat;
+  opacity: 0.55;
+}
+
+.rail:hover .thumb { transform: scale(1.12); }
+.rail .thumb.grabbing { transform: scale(1.12); cursor: grabbing; }
 
 /* Date gets its own column so the entries line up; the category is a chip
    rather than bracketed text. */

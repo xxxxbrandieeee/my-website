@@ -452,9 +452,8 @@
   }, { passive: false });
 })();
 
-// The news scroller, built as a dated scale rather than a generic bar: one
-// tick per entry, a longer tick carrying the year where it turns, and a
-// highlighter stroke for the thumb. Drag the thumb, or click anywhere on the
+// The news scroller, built as a spine: a thin rule that fills purple behind
+// you as you read, with one marker at the head. Drag the marker or click the
 // rail to jump. The native bar is hidden in CSS.
 (function () {
   var news = document.querySelector('.news');
@@ -468,7 +467,7 @@
   var rail = document.createElement('div');
   rail.className = 'rail';
   rail.setAttribute('aria-hidden', 'true');
-  rail.innerHTML = '<div class="rail-line"></div>';
+  rail.innerHTML = '<div class="rail-line"></div><div class="fill"></div>';
 
   var thumb = document.createElement('div');
   thumb.className = 'thumb';
@@ -480,52 +479,29 @@
   news.setAttribute('role', 'region');
   news.setAttribute('aria-label', 'News, scrollable');
 
-  var entries = Array.prototype.slice.call(news.querySelectorAll('p'));
-  var ticks = [];
+  var fill = rail.querySelector('.fill');
 
-  function offsetWithin(el) {
-    return el.getBoundingClientRect().top
-      - news.getBoundingClientRect().top + news.scrollTop;
-  }
+  // Measured on resize only, so sync stays pure style writes and can run
+  // straight off the scroll event without forcing layout each time.
+  var range = 0;
 
-  function build() {
-    ticks.forEach(function (t) { t.remove(); });
-    ticks = [];
-    var total = news.scrollHeight;
-    if (total <= news.clientHeight) return;
-
-    var lastYear = null;
-    entries.forEach(function (p) {
-      var stamp = p.querySelector('.date');
-      var year = stamp ? stamp.textContent.trim().split('/')[1] : null;
-      var turns = year && year !== lastYear;
-      lastYear = year;
-
-      var t = document.createElement('span');
-      t.className = 'tick' + (turns ? ' year' : '');
-      if (turns) t.setAttribute('data-year', year);
-      t.style.top = (offsetWithin(p) / total * 100) + '%';
-      rail.appendChild(t);
-      ticks.push(t);
-    });
+  function measure() {
+    range = news.scrollHeight - news.clientHeight;
+    rail.style.display = range > 1 ? '' : 'none';
   }
 
   function sync() {
-    var total = news.scrollHeight;
-    var view = news.clientHeight;
-    if (total <= view + 1) { rail.style.display = 'none'; return; }
-    rail.style.display = '';
-    thumb.style.height = (view / total * 100) + '%';
-    thumb.style.top = (news.scrollTop / total * 100) + '%';
+    if (range <= 1) return;
+    var progress = Math.min(1, Math.max(0, news.scrollTop / range));
+    thumb.style.top = progress * 100 + '%';
+    fill.style.height = progress * 100 + '%';
   }
 
-  news.addEventListener('scroll', function () {
-    requestAnimationFrame(sync);
-  }, { passive: true });
+  news.addEventListener('scroll', sync, { passive: true });
+  window.addEventListener('resize', function () { measure(); sync(); });
 
-  window.addEventListener('resize', function () { build(); sync(); });
-
-  // Drag the marker.
+  // Drag the marker. The rail maps to the scrollable range, not the content
+  // height, so the marker ends up under the pointer rather than lagging it.
   var from = 0, at = 0, dragging = false;
 
   thumb.addEventListener('pointerdown', function (e) {
@@ -540,8 +516,7 @@
 
   thumb.addEventListener('pointermove', function (e) {
     if (!dragging) return;
-    var travel = (e.clientY - from) / rail.clientHeight * news.scrollHeight;
-    news.scrollTop = at + travel;
+    news.scrollTop = at + (e.clientY - from) / rail.clientHeight * range;
   });
 
   function release() { dragging = false; thumb.classList.remove('grabbing'); }
@@ -552,14 +527,13 @@
   rail.addEventListener('pointerdown', function (e) {
     if (e.target === thumb) return;
     var box = rail.getBoundingClientRect();
-    var pos = (e.clientY - box.top) / box.height;
     news.scrollTo({
-      top: pos * news.scrollHeight - news.clientHeight / 2,
+      top: (e.clientY - box.top) / box.height * range,
       behavior: 'smooth'
     });
   });
 
-  build();
+  measure();
   sync();
 })();
 </script>
