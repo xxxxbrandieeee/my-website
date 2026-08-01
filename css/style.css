@@ -69,11 +69,6 @@ a {
   transition: color 0.15s, background-color 0.15s;
 }
 
-a:hover {
-  background-color: var(--accent-wash);
-  color: var(--on-wash);
-}
-
 .wrap {
   max-width: var(--page);
   margin: 0 auto;
@@ -131,11 +126,6 @@ a:hover {
   transition: color 0.2s, background-color 0.2s;
 }
 
-.nav a:hover {
-  color: var(--on-wash);
-  background-color: var(--accent-wash);
-}
-
 .nav a.active {
   color: var(--accent-strong);
   font-weight: 700;
@@ -143,7 +133,6 @@ a:hover {
 
 .nav .home { display: inline-flex; align-items: center; color: var(--accent-strong); margin-right: 4px; }
 .nav .home svg { width: 20px; height: 20px; }
-.nav .home:hover { background-color: transparent; }
 
 /* --- about ----------------------------------------------------- */
 
@@ -214,7 +203,6 @@ a:hover {
   transition: transform 0.2s, background-color 0.2s;
 }
 
-.socials a:hover { transform: translateY(-2px); background-color: transparent; }
 .socials svg { width: 20px; height: 20px; fill: currentColor; }
 .socials .sep { color: var(--rule); font-size: 15px; }
 
@@ -355,7 +343,6 @@ a:hover {
   opacity: 0.55;
 }
 
-.rail:hover .thumb { transform: scale(1.12); }
 .rail .thumb.grabbing { transform: scale(1.12); cursor: grabbing; }
 
 /* Date gets its own column so the entries line up; the category is a chip
@@ -406,6 +393,9 @@ a:hover {
 
 .news .venue { font-style: italic; }
 
+/* Only ever shown on phones — see the narrow-screen block at the foot. */
+.news-more { display: none; }
+
 /* The award is a distinction rather than a category, so it is the one label
    that gets marked with the highlighter. */
 .work .award {
@@ -447,12 +437,6 @@ a:hover {
   transition: background-size 0.28s ease-out, color 0.28s ease-out;
 }
 
-.news a:hover {
-  color: var(--on-wash);
-  background-color: transparent;   /* the gradient does the work, not a fill */
-  background-size: 100% 100%;
-}
-
 /* --- works ----------------------------------------------------- */
 
 .work {
@@ -467,13 +451,6 @@ a:hover {
   border-radius: 8px;
   box-shadow: 0 1px 2px var(--accent-shadow);
   transition: box-shadow 0.25s, border-color 0.25s, transform 0.25s;
-}
-
-/* Cards lift toward the reader and firm up their boundary on hover. */
-.work:hover {
-  border-color: var(--accent-soft);
-  box-shadow: 0 6px 20px var(--accent-shadow-lift);
-  transform: translateY(-2px);
 }
 
 /* The publications page lists entries without thumbnails. */
@@ -541,12 +518,6 @@ a:hover {
   transition: background-color 0.2s, color 0.2s, border-color 0.2s;
 }
 
-.work .links a:hover {
-  background: var(--accent-strong);
-  border-color: var(--accent-strong);
-  color: var(--on-accent);
-}
-
 /* Sizes are 14px of drawing plus the 0.7 units of stroke padding baked into
    each symbol's viewBox, so nothing clips at the edges. */
 .work .links svg {
@@ -596,8 +567,6 @@ a:hover {
 
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; }
-  .work:hover { transform: none; }
-  .socials a:hover { transform: none; }
 }
 
 /* --- keyboard focus -------------------------------------------- */
@@ -734,11 +703,6 @@ a:hover {
   transition: background-color 0.2s, border-color 0.2s;
 }
 
-.theme-toggle:hover {
-  background: var(--accent-wash);
-  border-color: var(--accent-soft);
-}
-
 .theme-toggle svg {
   width: 17px;
   height: 17px;
@@ -753,6 +717,88 @@ a:hover {
 .theme-toggle .icon-sun { display: none; }
 :root[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
 :root[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+
+/* --- interaction states ------------------------------------------
+
+   Hover is gated behind a real pointer. On a touchscreen :hover latches
+   after a tap and stays until you tap something else, so a tapped news
+   link would sit there highlighted for no reason. Touch gets :active,
+   which fires on press and releases on lift.
+   ------------------------------------------------------------------ */
+
+/* The browser's own grey tap flash, replaced by the states below. */
+a, button { -webkit-tap-highlight-color: transparent; }
+
+@media (hover: hover) and (pointer: fine) {
+  a:hover {
+    background-color: var(--accent-wash);
+    color: var(--on-wash);
+  }
+
+  .nav a:hover {
+    color: var(--on-wash);
+    background-color: var(--accent-wash);
+  }
+
+  .nav .home:hover { background-color: transparent; }
+
+  .socials a:hover { transform: translateY(-2px); background-color: transparent; }
+
+  .rail:hover .thumb { transform: scale(1.12); }
+
+  /* Drawn on rather than switched on — see the .news a rule above. */
+  .news a:hover {
+    color: var(--on-wash);
+    background-color: transparent;
+    background-size: 100% 100%;
+  }
+
+  /* Cards lift toward the reader and firm up their boundary. */
+  .work:hover {
+    border-color: var(--accent-soft);
+    box-shadow: 0 6px 20px var(--accent-shadow-lift);
+    transform: translateY(-2px);
+  }
+
+  .work .links a:hover {
+    background: var(--accent-strong);
+    border-color: var(--accent-strong);
+    color: var(--on-accent);
+  }
+
+  .theme-toggle:hover {
+    background: var(--accent-wash);
+    border-color: var(--accent-soft);
+  }
+}
+
+/* Press states. These run everywhere — on a mouse they read as a click,
+   on a finger they are the only feedback there is. */
+
+a:active { background-color: var(--accent-wash); color: var(--on-wash); }
+
+.nav .home:active,
+.socials a:active { background-color: transparent; transform: scale(0.92); }
+
+/* The highlighter arrives at once under a finger; there is no travelling
+   pointer for it to follow. */
+.news a:active {
+  color: var(--on-wash);
+  background-color: transparent;
+  background-size: 100% 100%;
+  transition: none;
+}
+
+.work .links a:active {
+  background: var(--accent-strong);
+  border-color: var(--accent-strong);
+  color: var(--on-accent);
+}
+
+.theme-toggle:active {
+  background: var(--accent-wash);
+  border-color: var(--accent-soft);
+}
 
 /* --- small screens --------------------------------------------- */
 
@@ -806,10 +852,37 @@ a:hover {
   .section > h2 { font-size: 23px; gap: 10px; }
   .section > h2 svg { width: 19px; height: 19px; }
 
-  /* The list runs full length on a phone rather than nesting a scroller
-     inside a scrolling page, so the rail has nothing to do. */
+  /* No nested scroller on a phone: the list either shows its first few
+     entries or runs full length, switched by a button. The rail has
+     nothing to do either way. */
   .news { max-height: none; overflow: visible; padding-right: 0; }
   .rail { display: none; }
+
+  .news.folded > p:nth-child(n + 5) { display: none; }
+
+  .news-more {
+    display: block;
+    width: 100%;
+    margin-top: 2px;
+    height: 44px;
+    padding: 0 14px;
+    background: transparent;
+    border: 1px solid var(--accent-soft);
+    border-radius: 8px;
+    font-family: var(--ui);
+    font-size: 13.5px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: var(--accent-strong);
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+  }
+
+  .news-more:active {
+    background: var(--accent-strong);
+    border-color: var(--accent-strong);
+    color: var(--on-accent);
+  }
 
   /* Too narrow to hang a label and still leave a readable measure, so the
      whole entry collapses to one flowing paragraph — date, category, then
@@ -823,7 +896,6 @@ a:hover {
 
   .work { grid-template-columns: 1fr; gap: 14px; padding: 18px; }
   .work .thumb { max-width: 220px; }
-  .work:hover { transform: none; }
 
   /* Two to a row, so four buttons make a block rather than a ragged 3 + 1,
      and each one is tall enough to hit. */

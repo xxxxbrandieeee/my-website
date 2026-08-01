@@ -536,6 +536,52 @@
   measure();
   sync();
 })();
+
+// On a phone the news list folds to its first few entries behind a button.
+// The breakpoint lives in CSS, so this only tracks state and wording — at
+// desktop width the class does nothing and the button is not rendered.
+(function () {
+  var news = document.querySelector('.news');
+  if (!news) return;
+
+  var total = news.querySelectorAll('p').length;
+  var SHOWN = 4;
+  if (total <= SHOWN) return;
+
+  news.id = news.id || 'news-list';
+
+  var host = news.closest('.news-scroll') || news;
+  var btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'news-more';
+  btn.setAttribute('aria-controls', news.id);
+  host.parentNode.insertBefore(btn, host.nextSibling);
+
+  function label() {
+    var folded = news.classList.contains('folded');
+    btn.textContent = folded
+      ? 'Show all ' + total + ' updates'
+      : 'Show fewer';
+    btn.setAttribute('aria-expanded', String(!folded));
+  }
+
+  btn.addEventListener('click', function () {
+    var folding = !news.classList.contains('folded');
+    news.classList.toggle('folded');
+    label();
+    // Collapsing from the foot of a long list would otherwise leave you
+    // stranded somewhere below the section.
+    if (folding) {
+      window.scrollTo({
+        top: news.getBoundingClientRect().top + window.scrollY - 90,
+        behavior: 'smooth'
+      });
+    }
+  });
+
+  news.classList.add('folded');
+  label();
+})();
 </script>
 
 </body>
