@@ -757,26 +757,97 @@ a:hover {
 /* --- small screens --------------------------------------------- */
 
 @media (max-width: 760px) {
-  .layout { grid-template-columns: 1fr; gap: 30px; padding-top: 36px; }
+  .wrap { padding: 0 20px; }
 
-  /* No room alongside the content, so the sidebar goes back to being a
-     header rather than a rail. */
+  /* --- navigation ---------------------------------------------- */
+
+  /* Sized to fit a 390px screen without sideways scroll, with the padding
+     doing double duty as touch target. overflow-x stays as a safety valve
+     for anything narrower. */
+  .nav .wrap {
+    gap: 0;
+    height: 54px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .nav .wrap::-webkit-scrollbar { display: none; }
+
+  .nav a {
+    padding: 12px 9px;
+    font-size: 13px;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+  }
+
+  .nav .home { margin-right: 0; padding: 12px 8px; }
+
+  .theme-toggle {
+    flex-shrink: 0;      /* the flex row was squeezing it to 19px */
+    width: 40px;
+    height: 40px;
+    margin-left: 8px;
+  }
+
+  /* --- profile -------------------------------------------------- */
+
+  .layout { grid-template-columns: 1fr; gap: 26px; padding-top: 30px; }
   .card { position: static; text-align: center; }
   .card img.portrait { margin-left: auto; margin-right: auto; }
-  .socials { justify-content: center; }
   .card .email { justify-content: center; }
 
-  .work { grid-template-columns: 1fr; gap: 16px; padding: 20px; }
-  .work .thumb { max-width: 240px; }
-  .work:hover { transform: none; }
+  /* Padding rather than gaps, so each icon is a 40px target. */
+  .socials { justify-content: center; gap: 2px; }
+  .socials a { padding: 10px; }
+  .socials .sep { display: none; }
 
-  .nav .wrap { gap: 16px; overflow-x: auto; }
+  /* --- sections ------------------------------------------------- */
+
+  .section { padding: 26px 0; }
+  .section > h2 { font-size: 23px; gap: 10px; }
+  .section > h2 svg { width: 19px; height: 19px; }
+
+  /* The list runs full length on a phone rather than nesting a scroller
+     inside a scrolling page, so the rail has nothing to do. */
   .news { max-height: none; overflow: visible; padding-right: 0; }
   .rail { display: none; }
 
   /* Too narrow to hang a label and still leave a readable measure, so the
-     category returns to the flow. */
-  .news p { grid-template-columns: 1fr; gap: 5px; }
-  .news .item { padding-left: 0; text-indent: 0; }
-  .news .kind { width: auto; margin-right: 10px; }
+     whole entry collapses to one flowing paragraph — date, category, then
+     the sentence — rather than giving the date a line of its own. */
+  .news p { display: block; margin-bottom: 18px; }
+  .news .date { margin-right: 9px; }
+  .news .item { display: inline; padding-left: 0; text-indent: 0; }
+  .news .kind { width: auto; margin-right: 8px; }
+
+  /* --- works ---------------------------------------------------- */
+
+  .work { grid-template-columns: 1fr; gap: 14px; padding: 18px; }
+  .work .thumb { max-width: 220px; }
+  .work:hover { transform: none; }
+
+  /* Two to a row, so four buttons make a block rather than a ragged 3 + 1,
+     and each one is tall enough to hit. */
+  .work .links { gap: 8px; }
+  .work .links a {
+    flex: 1 1 calc(50% - 4px);
+    min-width: calc(50% - 4px);
+    height: 38px;
+    padding: 0 12px;
+  }
+
+  .foot { padding: 20px 0 40px; }
+}
+
+/* Narrow phones: the nav has to fit without scrolling sideways, or
+   PUBLICATIONS ends up off the edge where nobody finds it. */
+@media (max-width: 380px) {
+  .wrap { padding: 0 16px; }
+  .nav a { padding: 12px 6px; font-size: 12px; letter-spacing: 0; }
+  .theme-toggle { margin-left: 4px; }
+
+  /* The house is redundant here — ABOUT goes to the same place, and on the
+     publications page the other two links still lead home. */
+  .nav .home { display: none; }
+
+  .card img.portrait { width: 140px; height: 140px; }
 }
