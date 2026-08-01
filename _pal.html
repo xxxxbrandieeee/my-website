@@ -1,0 +1,853 @@
+<title>Accent palettes for jzhi.app</title>
+
+<style>
+/* ---------------------------------------------------------------
+   Neutral shell, deliberately desaturated so the candidate accents
+   are judged against each other and not against the page.
+   --------------------------------------------------------------- */
+
+:root {
+  --ground: #f2f2f0;
+  --surface: #ffffff;
+  --ink: #1a1a19;
+  --ink-2: #57574f;
+  --muted: #86867d;
+  --hair: #e0e0dc;
+  --hair-2: #cfcfc9;
+
+  --spec-ground: #ffffff;
+  --spec-thumb: #f6f6f4;
+
+  --serif: ui-serif, Georgia, "Times New Roman", serif;
+  --sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+:root[data-ground="warm"] { --spec-ground: #faf7f2; --spec-thumb: #f3efe7; }
+:root[data-ground="cool"] { --spec-ground: #f6f8fa; --spec-thumb: #eef1f5; }
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground: #141413; --surface: #1d1d1b; --ink: #ecebe8; --ink-2: #b4b3ac;
+    --muted: #8b8a82; --hair: #2e2e2b; --hair-2: #3d3d39;
+    --spec-ground: #1d1d1b; --spec-thumb: #262624;
+  }
+  :root:not([data-theme="light"])[data-ground="warm"] { --spec-ground: #221f1b; --spec-thumb: #2b2723; }
+  :root:not([data-theme="light"])[data-ground="cool"] { --spec-ground: #1a1d21; --spec-thumb: #232729; }
+}
+
+:root[data-theme="dark"] {
+  --ground: #141413; --surface: #1d1d1b; --ink: #ecebe8; --ink-2: #b4b3ac;
+  --muted: #8b8a82; --hair: #2e2e2b; --hair-2: #3d3d39;
+  --spec-ground: #1d1d1b; --spec-thumb: #262624;
+}
+:root[data-theme="dark"][data-ground="warm"] { --spec-ground: #221f1b; --spec-thumb: #2b2723; }
+:root[data-theme="dark"][data-ground="cool"] { --spec-ground: #1a1d21; --spec-thumb: #232729; }
+
+:root[data-theme="light"] {
+  --ground: #f2f2f0; --surface: #ffffff; --ink: #1a1a19; --ink-2: #57574f;
+  --muted: #86867d; --hair: #e0e0dc; --hair-2: #cfcfc9;
+  --spec-ground: #ffffff; --spec-thumb: #f6f6f4;
+}
+:root[data-theme="light"][data-ground="warm"] { --spec-ground: #faf7f2; --spec-thumb: #f3efe7; }
+:root[data-theme="light"][data-ground="cool"] { --spec-ground: #f6f8fa; --spec-thumb: #eef1f5; }
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+.page {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 44px 24px 96px;
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+
+/* --- masthead ---------------------------------------------------- */
+
+.masthead { display: flex; flex-direction: column; gap: 12px; }
+
+.masthead h1 {
+  font-family: var(--serif);
+  font-size: clamp(28px, 5vw, 40px);
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+  margin: 0;
+}
+
+.masthead p { margin: 0; max-width: 64ch; color: var(--ink-2); }
+.masthead mark, .band mark {
+  background: rgba(247, 208, 70, 0.45); color: inherit;
+  padding: 0 3px 1px; border-radius: 2px;
+}
+
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* --- jump nav + ground control ----------------------------------- */
+
+.bar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+  margin: 0 -8px;
+  padding: 11px 14px;
+  background: color-mix(in srgb, var(--ground) 88%, transparent);
+  backdrop-filter: saturate(160%) blur(10px);
+  border: 1px solid var(--hair);
+  border-radius: 10px;
+}
+
+.bar .label {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.bar a, .bar button {
+  font: inherit;
+  font-size: 13.5px;
+  padding: 4px 12px;
+  border: 1px solid var(--hair-2);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink-2);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.bar a:hover, .bar button:hover { border-color: var(--muted); }
+
+.bar button[aria-pressed="true"] {
+  background: var(--ink); border-color: var(--ink); color: var(--surface);
+}
+
+.bar .sep { flex: 1 1 12px; }
+
+/* --- band heading ------------------------------------------------ */
+
+.band {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--hair-2);
+  scroll-margin-top: 72px;
+}
+
+.band h2 { font-family: var(--serif); font-size: 25px; font-weight: 500; margin: 0; }
+.band > p { margin: 0; max-width: 66ch; color: var(--ink-2); }
+
+/* --- specimen ---------------------------------------------------- */
+
+.spec {
+  --strong: var(--a-strong);
+  --soft: var(--a-soft);
+  --wash: color-mix(in srgb, var(--strong) 11%, transparent);
+  --line: color-mix(in srgb, var(--strong) 15%, transparent);
+
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--hair);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--surface);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .spec {
+    --strong: color-mix(in srgb, var(--a-strong) 45%, #fff);
+    --soft: color-mix(in srgb, var(--a-soft) 62%, #000);
+  }
+}
+:root[data-theme="dark"] .spec {
+  --strong: color-mix(in srgb, var(--a-strong) 45%, #fff);
+  --soft: color-mix(in srgb, var(--a-soft) 62%, #000);
+}
+:root[data-theme="light"] .spec { --strong: var(--a-strong); --soft: var(--a-soft); }
+
+.spec-head {
+  display: flex; flex-wrap: wrap; align-items: baseline;
+  gap: 6px 14px; padding: 18px 20px 4px;
+}
+.spec-head h3 { font-family: var(--serif); font-size: 21px; font-weight: 500; margin: 0; flex: 1 1 auto; }
+.spec-head .hex {
+  font-family: var(--mono); font-size: 11.5px; color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.spec-head .duo {
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.09em;
+  text-transform: uppercase; color: var(--strong);
+  border: 1px solid var(--line); border-radius: 2px; padding: 0 5px 1px;
+}
+
+.spec-note { padding: 0 20px 14px; margin: 0; color: var(--ink-2); font-size: 15px; max-width: 68ch; }
+
+.ramp { display: flex; padding: 0 20px 16px; }
+.ramp i { display: block; height: 26px; flex: 1 1 0; }
+.ramp i:first-child { border-radius: 4px 0 0 4px; }
+.ramp i:last-child { border-radius: 0 4px 4px 0; }
+
+.readout {
+  display: flex; flex-wrap: wrap; gap: 4px 16px; padding: 0 20px 16px;
+  font-family: var(--mono); font-size: 11px; color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.readout .pass { color: var(--ink-2); }
+.readout .warn { color: #b4462f; }
+:root[data-theme="dark"] .readout .warn { color: #e08a72; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .readout .warn { color: #e08a72; }
+}
+
+/* --- the miniature of the real site ------------------------------ */
+
+.demo { background: var(--spec-ground); border-top: 1px solid var(--hair); padding: 0 0 20px; }
+
+.demo-nav {
+  display: flex; align-items: center; gap: 20px; height: 44px; padding: 0 20px;
+  border-top: 3px solid var(--soft); border-bottom: 1px solid var(--hair);
+  font-size: 13px; letter-spacing: 0.03em;
+}
+.demo-nav .home { display: inline-flex; color: var(--strong); }
+.demo-nav .home svg { width: 17px; height: 17px; }
+.demo-nav span { color: var(--muted); }
+.demo-nav span.on { color: var(--strong); font-weight: 700; }
+.demo-nav .toggle {
+  margin-left: auto; display: inline-flex; align-items: center; justify-content: center;
+  width: 27px; height: 27px; border: 1px solid var(--line); border-radius: 7px; color: var(--strong);
+}
+.demo-nav .toggle svg { width: 14px; height: 14px; }
+
+.demo-body { padding: 18px 20px 0; display: flex; flex-direction: column; gap: 14px; }
+
+.demo h4 {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 20px; font-weight: 400; letter-spacing: 0.02em;
+  color: var(--strong); margin: 0;
+}
+.demo h4 svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+.demo-news {
+  display: grid; grid-template-columns: 54px 1fr; gap: 0 14px; align-items: baseline;
+  font-size: 14px; color: var(--ink-2); line-height: 1.55;
+}
+.demo-news .date {
+  font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--muted);
+}
+.demo-news u {
+  color: var(--ink); text-decoration: underline dashed var(--soft);
+  text-decoration-thickness: 1.5px; text-underline-offset: 4px;
+}
+
+.demo-card {
+  display: grid; grid-template-columns: 116px 1fr; gap: 18px; align-items: center;
+  padding: 15px 17px; background: var(--spec-ground);
+  border: 1px solid var(--line); border-radius: 8px;
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--strong) 6%, transparent);
+}
+.demo-card.flat { grid-template-columns: 1fr; }
+.demo-card .thumb {
+  aspect-ratio: 3 / 2; background: var(--spec-thumb); border-radius: 4px;
+  display: grid; place-items: center;
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em; color: var(--muted);
+}
+.demo-card h5 { font-size: 14px; font-weight: 400; margin: 0 0 5px; line-height: 1.4; color: var(--ink); }
+.demo-card .authors { font-size: 13px; margin: 0 0 3px; color: var(--ink-2); }
+.demo-card .authors u {
+  text-decoration: underline; text-decoration-color: var(--soft);
+  text-decoration-thickness: 1px; text-underline-offset: 3px;
+}
+.demo-card .venue {
+  font-size: 13px; font-style: italic; color: var(--ink-2);
+  margin: 0 0 10px; display: flex; align-items: baseline; gap: 9px; flex-wrap: wrap;
+}
+.demo-card.flat .venue { margin-bottom: 0; }
+
+.btns { display: flex; flex-wrap: wrap; gap: 8px; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  min-width: 80px; height: 26px; padding: 0 11px;
+  border: 1px solid var(--soft); border-radius: 8px;
+  background: transparent; color: var(--strong); font-size: 13px; font-weight: 500;
+}
+.btn.hover { background: var(--strong); border-color: var(--strong); color: var(--spec-ground); }
+.btn svg { width: 13px; height: 13px; flex-shrink: 0; overflow: visible; }
+
+.demo svg { fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ==================================================================
+   LABEL TREATMENTS
+   ================================================================== */
+
+.lab .kind, .lab .award { font-style: normal; }
+
+.lab-mono .kind, .lab-mono .award {
+  font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.01em; color: var(--strong);
+}
+.lab-mono .kind::before, .lab-mono .award::before { content: "["; }
+.lab-mono .kind::after, .lab-mono .award::after { content: "]"; }
+.lab-mono .kind { margin-right: 8px; }
+
+.lab-caps .kind, .lab-caps .award {
+  font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--strong); border-bottom: 1px solid var(--soft); padding-bottom: 2px;
+}
+.lab-caps .kind { margin-right: 10px; }
+
+.lab-tick .kind, .lab-tick .award {
+  border-left: 2px solid var(--strong); padding-left: 8px;
+  font-size: 13px; font-weight: 600; color: var(--strong);
+}
+.lab-tick .kind { margin-right: 9px; }
+
+.lab-margin .demo-news { grid-template-columns: 72px 1fr; }
+.lab-margin .stack { display: flex; flex-direction: column; line-height: 1.35; }
+.lab-margin .stack .kind,
+.lab-margin .award {
+  font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--strong);
+}
+
+.lab-tag .kind, .lab-tag .award {
+  border: 1px solid var(--soft); border-radius: 2px; padding: 0 6px 1px;
+  font-size: 11.5px; color: var(--strong);
+}
+.lab-tag .kind { margin-right: 9px; }
+
+.lab-rule .kind, .lab-rule .award { font-style: italic; font-size: 14px; color: var(--strong); }
+.lab-rule .kind::after {
+  content: ""; display: inline-block; width: 16px; height: 1px;
+  background: var(--soft); vertical-align: middle; margin: 0 3px 0 9px;
+}
+
+
+/* 7 - the word sitting in a highlighter stripe */
+.lab-mark .kind, .lab-mark .award {
+  background: var(--wash); color: var(--strong);
+  padding: 1px 6px 2px; border-radius: 2px; font-size: 13px;
+}
+.lab-mark .kind { margin-right: 9px; }
+
+/* 8 - raised like a footnote reference */
+.lab-foot .kind, .lab-foot .award {
+  font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--strong); vertical-align: 5px;
+}
+.lab-foot .kind { margin-right: 8px; }
+
+/* 9 - a solidus, the way a masthead separates a section from a headline */
+.lab-slash .kind, .lab-slash .award { font-size: 13px; color: var(--strong); }
+.lab-slash .kind::after { content: " /"; color: var(--soft); }
+.lab-slash .kind { margin-right: 8px; }
+.lab-slash .award::before { content: "/ "; color: var(--soft); }
+
+/* 10 - dot leaders, borrowed from an index or a table of contents */
+.lab-dots .kind, .lab-dots .award {
+  font-size: 12.5px; letter-spacing: 0.02em; color: var(--strong);
+}
+.lab-dots .kind::after {
+  content: ""; display: inline-block; width: 26px; height: 0;
+  border-bottom: 1px dotted var(--soft);
+  margin: 0 4px 0 9px; vertical-align: 3px;
+}
+
+/* 11 - reversed out of a solid block */
+.lab-solid .kind, .lab-solid .award {
+  background: var(--strong); color: var(--spec-ground);
+  padding: 1px 7px 2px; border-radius: 2px;
+  font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+}
+.lab-solid .kind { margin-right: 9px; }
+
+/* 12 - nothing at all but letterspaced caps */
+.lab-plain .kind, .lab-plain .award {
+  font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--strong);
+}
+.lab-plain .kind { margin-right: 12px; }
+
+/* the highlighted phrase shown in every colour specimen */
+.demo-news mark {
+  background: var(--wash); color: inherit;
+  padding: 0 3px 1px; border-radius: 2px;
+}
+
+
+/* Glyphs ride along in every label; each treatment decides whether to show
+   the mark, the word, or both. */
+.lab .kind svg, .lab .award svg { display: none; }
+
+/* 13 - the category as a mark, no word at all */
+.lab-glyph .kind, .lab-glyph .award { font-size: 0; color: var(--strong); margin-right: 10px; }
+.lab-glyph .kind svg, .lab-glyph .award svg {
+  display: inline-block; width: 15px; height: 15px; vertical-align: -3px;
+}
+
+/* 14 - mark and word together, matching the resource buttons */
+.lab-icon .kind, .lab-icon .award {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 12.5px; color: var(--strong); vertical-align: -2px;
+}
+.lab-icon .kind { margin-right: 10px; }
+.lab-icon .kind svg, .lab-icon .award svg { display: block; width: 13px; height: 13px; }
+
+/* 15 - small caps in the display face, borrowing the sidebar's voice */
+.lab-serif .kind, .lab-serif .award {
+  font-family: var(--serif); font-size: 16px; font-variant: small-caps;
+  letter-spacing: 0.05em; color: var(--strong);
+}
+.lab-serif .kind { margin-right: 10px; }
+
+/* 16 - a mid-dot, the smallest possible separator */
+.lab-dot .kind, .lab-dot .award { font-size: 13px; color: var(--strong); }
+.lab-dot .kind::after { content: "\00B7"; color: var(--soft); margin-left: 7px; }
+.lab-dot .kind { margin-right: 7px; }
+
+/* 17 - date and category as one metadata block, divided by a hairline */
+.lab-meta .demo-news { grid-template-columns: 88px 1fr; }
+.lab-meta .stack { display: flex; flex-direction: column; gap: 4px; }
+.lab-meta .stack .kind {
+  font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--strong); border-top: 1px solid var(--soft); padding-top: 4px;
+}
+.lab-meta .award {
+  font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--strong);
+}
+
+/* 18 - the label holds a fixed slot and the sentence hangs past it, so the
+   categories form a column inside the running text */
+.lab-hang .body { display: block; padding-left: 78px; text-indent: -78px; }
+.lab-hang .kind {
+  display: inline-block; width: 72px; font-size: 10.5px;
+  letter-spacing: 0.09em; text-transform: uppercase; color: var(--strong);
+  text-indent: 0;
+}
+.lab-hang .award {
+  font-size: 10.5px; letter-spacing: 0.09em; text-transform: uppercase; color: var(--strong);
+}
+
+/* 19 - no label; the sentence already says what kind of item it is */
+.lab-none .kind { display: none; }
+.lab-none .award {
+  font-size: 10.5px; letter-spacing: 0.09em; text-transform: uppercase; color: var(--strong);
+}
+
+.lab-title {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px;
+  padding: 16px 20px 6px;
+}
+.lab-title h3 { font-family: var(--serif); font-size: 19px; font-weight: 500; margin: 0; }
+.lab-title .n { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+
+/* --- closing note ------------------------------------------------- */
+
+.note { padding: 20px 22px; background: var(--surface); border: 1px solid var(--hair); border-radius: 10px; }
+.note h2 { font-family: var(--serif); font-size: 19px; font-weight: 500; margin: 0 0 8px; }
+.note p { margin: 0 0 10px; color: var(--ink-2); max-width: 68ch; }
+.note p:last-child { margin-bottom: 0; }
+.note code {
+  font-family: var(--mono); font-size: 13px; padding: 1px 5px;
+  border-radius: 4px; background: var(--ground); color: var(--ink);
+}
+
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+@media (max-width: 620px) {
+  .demo-card { grid-template-columns: 1fr; }
+  .demo-card .thumb { max-width: 150px; }
+  .demo-news, .lab-margin .demo-news { grid-template-columns: 1fr; gap: 4px; }
+}
+</style>
+
+<svg aria-hidden="true" style="position:absolute;width:0;height:0"><defs>
+  <symbol id="g-home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.7V20h14V9.7"/><path d="M9.5 20v-6h5v6"/></symbol>
+  <symbol id="g-moon" viewBox="0 0 24 24"><path d="M20.6 14.6A8.6 8.6 0 0 1 9.4 3.4a8.6 8.6 0 1 0 11.2 11.2z"/></symbol>
+  <symbol id="g-bookmark" viewBox="0 0 24 24"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4.6L5 21V4a1 1 0 0 1 1-1z"/></symbol>
+  <symbol id="c-media" viewBox="0 0 24 24"><path d="M4 10v4h3l7 4V6l-7 4z"/><path d="M17.5 9.4a3.6 3.6 0 0 1 0 5.2"/></symbol>
+  <symbol id="c-paper" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/><path d="M9 12h6M9 15.5h6"/></symbol>
+  <symbol id="c-workshop" viewBox="0 0 24 24"><path d="M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M3.5 20a5.5 5.5 0 0 1 11 0"/><path d="M16 6.2a3 3 0 0 1 0 5.6"/><path d="M17.2 14.2A5.5 5.5 0 0 1 20.5 19"/></symbol>
+  <symbol id="c-conf" viewBox="0 0 24 24"><path d="M3 4h18v12H3z"/><path d="M12 16v4"/><path d="M8.5 20h7"/></symbol>
+  <symbol id="c-award" viewBox="0 0 24 24"><path d="m12 3.4 2.1 4.5 4.9.6-3.6 3.4 1 4.9L12 14.4l-4.4 2.4 1-4.9L5 8.5l4.9-.6z"/></symbol>
+  <symbol id="g-paper" viewBox="-0.7 -0.7 15.4 15.4"><path d="M14 4.667a1.66 1.66 0 0 0-.549-1.327L10.66.549A1.66 1.66 0 0 0 9.333 0H1.556C.696 0 0 .696 0 1.556v10.888C0 13.304.696 14 1.556 14h10.888c.86 0 1.556-.696 1.556-1.556z"/><path d="M9.333 0v3.889c0 .429.349.778.778.778H14"/></symbol>
+  <symbol id="g-doi" viewBox="-0.7 -0.7 15.36 15.357"><path d="M5.6 7.653a3.5 3.5 0 0 0 5.278.378l2.1-2.1a3.5 3.5 0 0 0-4.949-4.949L6.825 2.179"/><path d="M8.36 6.304a3.5 3.5 0 0 0-5.278-.378l-2.1 2.1a3.5 3.5 0 0 0 4.949 4.949l1.197-1.197"/></symbol>
+  <symbol id="g-web" viewBox="-0.7 -0.7 15.4 15.4"><path d="M14 7.778v4.666C14 13.304 13.304 14 12.444 14H1.556C.696 14 0 13.304 0 12.444V1.556C0 .696.696 0 1.556 0h4.666M14 0 7 7M9.333 0H14v4.667"/></symbol>
+  <symbol id="g-code" viewBox="-0.7 -0.7 15.4 9.4"><path d="M9.8 8 14 4 9.8 0M4.2 0 0 4l4.2 4"/></symbol>
+</defs></svg>
+
+<div class="page">
+
+  <header class="masthead">
+    <span class="eyebrow">Design decision &#183; jzhi.app</span>
+    <h1>Eighteen accents and nineteen ways to set a label</h1>
+    <p>
+      Purple and yellow turned out to be the most interesting request, because the
+      pair does something the single-hue options cannot: purple carries the text and
+      the yellow only shows up where something is <mark>marked</mark>. That is what a
+      person does to a page when reading closely, so it is the one palette here that
+      says something about the research rather than merely coordinating with it.
+    </p>
+    <p>
+      Every specimen is your own nav bar, news row and work card. The
+      <em>TIME</em> link in each is shown already highlighted, so you can see what the
+      hover tint does before you commit to it. Contrast is measured live from the
+      rendered pixels.
+    </p>
+  </header>
+
+  <nav class="bar">
+    <span class="label">Jump</span>
+    <a href="#py-band">Purple + yellow</a>
+    <a href="#greens-band">Greens</a>
+    <a href="#blues-band">Blues</a>
+    <a href="#think-band">Thinking</a>
+    <a href="#labels-band">Labels</a>
+    <span class="sep"></span>
+    <span class="label">Ground</span>
+    <button type="button" data-g="white" aria-pressed="true">White</button>
+    <button type="button" data-g="warm">Warm</button>
+    <button type="button" data-g="cool">Cool</button>
+  </nav>
+
+  <section class="band" id="py-band">
+    <h2>Purple and yellow</h2>
+    <p>
+      Five ways to run the pair. The first four use yellow for the rules and
+      underlines; the last uses it only as a highlight, leaving purple to do
+      everything else.
+    </p>
+  </section>
+  <div id="purpleyellow"></div>
+
+  <section class="band" id="greens-band">
+    <h2>Greens</h2>
+    <p>From the last round, teal end to moss end, with one desaturated outlier.</p>
+  </section>
+  <div id="greens"></div>
+
+  <section class="band" id="blues-band">
+    <h2>Blues</h2>
+    <p>
+      Four blues that are not the default product blue. Each comes from a different
+      making tradition rather than from a UI kit.
+    </p>
+  </section>
+  <div id="blues"></div>
+
+  <section class="band" id="think-band">
+    <h2>The materials of thinking</h2>
+    <p>
+      Sampled from the physical apparatus of reading, annotating and working a problem
+      through. These are the ones that would actually mean something on a site about
+      how people think &#8212; and the two-hue pairs are the hardest to mistake for a
+      generated palette.
+    </p>
+  </section>
+  <div id="thinking"></div>
+
+  <section class="band" id="labels-band">
+    <h2>Label treatments</h2>
+    <p>
+      Nineteen ways to set the news category and the award marker, none of them a
+      pill. Colour is held constant so the treatment is the only variable, and each
+      is shown across three entries &#8212; a short category and a long one behave
+      differently, and the award marker has to work too.
+    </p>
+  </section>
+  <div id="labels"></div>
+
+  <section class="note">
+    <h2>Applying whichever you pick</h2>
+    <p>
+      Colour is two values in <code>:root</code> plus the three <code>rgba()</code>
+      tints sharing the strong hue. A two-hue pair needs one extra line, since the
+      tints stay derived from the strong colour while the rules use the soft one.
+    </p>
+    <p>
+      The label treatment is a single rule, the shared
+      <code>.news .kind, .work .award</code> block. Give me a colour name and a label
+      number and I will apply both.
+    </p>
+  </section>
+
+</div>
+
+<script>
+var GREENS = [
+  { name: "Spruce", strong: "#1f6b5c", soft: "#8ab5aa",
+    note: "The teal end, but unmistakably green. Cool and a little severe. Stays crisp at 11px, which matters for the button labels." },
+  { name: "Verdigris", strong: "#33705f", soft: "#8fb8ab",
+    note: "Oxidised copper. Warmer and greyer than spruce, which stops it reading as a product accent." },
+  { name: "Pine", strong: "#3d6b52", soft: "#95b79f",
+    note: "The middle of the range. Plainly a green, no teal cast. Pairs well with the Cormorant name in the sidebar." },
+  { name: "Fern", strong: "#456b48", soft: "#9cb89b",
+    note: "The moss end, warmest of the greens. Starts to feel decorative at small sizes." },
+  { name: "Slate green", strong: "#42625b", soft: "#98aca7",
+    note: "Desaturated almost to a neutral. Nearly disappears as an accent, which is either the point or the problem." }
+];
+
+var BLUES = [
+  { name: "Blue-black", strong: "#28405c", soft: "#93a3b8",
+    note: "The colour of fountain pen ink on a page, which is to say the colour most handwritten thought has actually been. Dark enough to sit beside body text without competing, and the safest of the four at small sizes." },
+  { name: "Cyanotype", strong: "#1d5470", soft: "#8db0c2",
+    note: "Blueprint blue. Reads as a plan or a working drawing rather than a brand. More saturated than blue-black, so the button labels and section headings carry further down the page." },
+  { name: "Payne's grey", strong: "#3e5261", soft: "#9aa8b2",
+    note: "A painter's mixing colour, never used as a pure hue. The quietest blue here by a distance. Choose it if you want the accent to be felt rather than seen." },
+  { name: "Delft", strong: "#2a5a86", soft: "#93b3cd",
+    note: "Ceramic blue, the most conventionally blue of the four. Bright and legible, but also the closest to the institutional blue every other CS department site uses." }
+];
+
+var THINKING = [
+  { name: "Marginalia", strong: "#9c3b32", soft: "#b9aa9b", duo: true,
+    note: "Red pencil against graphite on paper. This is what a person thinking through a text actually leaves behind, and it is the palette closest to your close-reading work. The red carries headings and links; the warm grey carries the rules and underlines." },
+  { name: "Iron gall", strong: "#2b3f5c", soft: "#a98d64", duo: true,
+    note: "Iron gall ink is blue-black when written and oxidises to brown over centuries, so the two hues are literally the same substance at two ages. Historically exact and, on a page of citations going back years, quietly apt." },
+  { name: "Graphite and correction", strong: "#414b57", soft: "#c0908a", duo: true,
+    note: "Pencil and the red of a correction mark, inverted from marginalia: the neutral does the talking and the red only appears on rules and underlines. The most restrained option on this page." },
+  { name: "Foxed paper", strong: "#7a5230", soft: "#c2a887",
+    note: "The sepia an old page turns. Single hue, very warm, and the only palette here that would rather sit on the warm paper ground than on white. Try the ground switcher with this one." }
+];
+
+
+var PURPLE_YELLOW = [
+  { name: "Amethyst and ochre", strong: "#7e3b94", soft: "#c9a227", duo: "purple + yellow",
+    note: "Your existing purple with a warm ochre carrying the rules and underlines. Keeps the identity people already associate with the site and stops the purple reading as decorative, because it now has something to sit against." },
+  { name: "Aubergine and saffron", strong: "#58325f", soft: "#d9a441", duo: "purple + yellow",
+    note: "A deeper, greyer purple than yours, which takes the candy out of it, against a saffron that is bright enough to survive at 1px. The most balanced of the pairs." },
+  { name: "Violet ink and brass", strong: "#4a3570", soft: "#b8912f", duo: "purple + yellow",
+    note: "Purple pushed toward blue and yellow pushed toward metal. Cooler and more formal. The brass is dark enough that the underlines read as a considered colour rather than as a highlight." },
+  { name: "Plum and wheat", strong: "#6d3350", soft: "#d3b25e", duo: "purple + yellow",
+    note: "Purple pulled toward red, yellow softened toward straw. The warmest pair here, and the one that most wants the warm paper ground rather than white." },
+  { name: "Highlighter", strong: "#5c2a6d", soft: "#b48fc4", wash: "rgba(247, 208, 70, 0.45)",
+    duo: "purple + yellow", isMark: true,
+    note: "The idea rather than just the colours. Purple carries text and rules as it does now, and the yellow appears only where something is marked - the hover tint, the category, the award. That is exactly what a person does to a page when reading closely, which makes it the one palette here that says something about the research rather than merely coordinating with it." }
+];
+
+var LABELS = [
+  { cls: "lab-mono", name: "Bracketed monospace",
+    note: "Borrows preprint and citation convention, the vernacular your readers already know. Needs no container and no fill to read as metadata." },
+  { cls: "lab-caps", name: "Caps on a hairline",
+    note: "Keeps the uppercase, drops the pill, so the label sits in the text rather than on top of it. The rule ties into the underline language already on your name and news links." },
+  { cls: "lab-tick", name: "Accent rule",
+    note: "A short vertical stroke instead of an enclosure. Sentence case, so it reads as a word rather than a tag. The most editorial of the six." },
+  { cls: "lab-margin", name: "Moved to the margin",
+    note: "No inline label at all. The category joins the date in the left column and the sentence starts flush. Cleanest body text, least prominent category." },
+  { cls: "lab-tag", name: "Square outline",
+    note: "Still a container, but squared and unfilled, so it reads as a filing tag rather than a status badge. Nearest to what you have now." },
+  { cls: "lab-rule", name: "Italic and rule",
+    note: "The word in italic, then a short rule running into the sentence. Old newspaper standfirst. Most distinctive, most likely to date." },
+  { cls: "lab-mark", name: "Highlighter stripe",
+    note: "The word sitting in a wash of colour with no border. Reads as something marked by a reader rather than tagged by a system. Pairs naturally with the Highlighter palette." },
+  { cls: "lab-foot", name: "Footnote marker",
+    note: "Raised like a reference. Takes up almost no room and keeps the sentence intact, at the cost of being easy to miss." },
+  { cls: "lab-slash", name: "Solidus",
+    note: "A single slash between the category and the sentence, the way a masthead separates a section from a headline. The lightest touch that still divides." },
+  { cls: "lab-dots", name: "Dot leaders",
+    note: "Borrowed from an index or a table of contents. Sets the category apart while pointing at what follows. Distinctive, and the most bookish option here." },
+  { cls: "lab-solid", name: "Reversed block",
+    note: "White out of a solid accent. The most emphatic of the twelve - it will pull the eye to the categories before the news itself, which may or may not be what you want." },
+  { cls: "lab-plain", name: "Plain caps",
+    note: "No container, no rule, no bracket. Just letterspaced caps in the accent colour. The baseline against which every other option here should justify itself." },
+  { cls: "lab-glyph", name: "Mark only",
+    note: "One outline glyph per category and no word at all. Scans faster than any wording once the set is learned, takes almost no room, and reuses the icon language already in your resource buttons. The cost is that a first-time reader has to infer what each mark means." },
+  { cls: "lab-icon", name: "Mark and word",
+    note: "The same glyphs with the word alongside, set exactly like your Paper and DOI buttons. The most internally consistent option on this page - the news list and the work cards would be speaking the same language." },
+  { cls: "lab-serif", name: "Serif small caps",
+    note: "The category set in the display face rather than the body face, picking up the voice of your name in the sidebar. Introduces a second typeface into the news list, which is either a welcome bit of texture or one thing too many." },
+  { cls: "lab-dot", name: "Mid-dot",
+    note: "A single raised dot between category and sentence. Less assertive than the solidus and about as light as punctuation gets while still dividing." },
+  { cls: "lab-meta", name: "Stacked metadata",
+    note: "Date and category form one block in the left column, split by a hairline, and the sentence runs clean. Related to Moved to the margin, but the rule makes the pairing deliberate rather than incidental." },
+  { cls: "lab-hang", name: "Hanging indent",
+    note: "The label occupies a fixed slot and the sentence hangs past it, so categories line up into a column inside the running text without needing a separate grid column. Quietly the most typographically sophisticated option here." },
+  { cls: "lab-none", name: "No label",
+    note: "Worth proposing seriously: your sentences already say what each item is. \u201cAccepted at CHI 2026\u201d is a paper, \u201cfeatured in TIME\u201d is press. The category may be redundant, and deleting it gives you the cleanest news list of the twenty - only the award marker survives, because nothing else states it." }
+];
+
+var BTN = [["g-paper","Paper",1],["g-doi","DOI",0],["g-web","Website",0],["g-code","Code",0]];
+
+function buttons() {
+  return BTN.map(function (b) {
+    return '<span class="btn' + (b[2] ? " hover" : "") + '">' +
+      '<svg aria-hidden="true"><use href="#' + b[0] + '"/></svg>' + b[1] + "</span>";
+  }).join("");
+}
+
+var NEWS = [
+  { date: "04/2026", kind: "Media", icon: "c-media",
+    body: '<u>Work on AI\u2019s impact on critical thinking</u> featured in <mark><u>TIME</u></mark>.' },
+  { date: "01/2026", kind: "Paper", icon: "c-paper",
+    body: '\u201c<u>Content Creation with Generative AI</u>\u201d accepted at <i>CSCW 2026</i>.' },
+  { date: "10/2024", kind: "Award", icon: "c-award",
+    body: '\u201c<u>Investigating What Factors Influence Users\u2019 Rating</u>\u201d received Best Paper Award at <i>HCOMP 2024</i>.' }
+];
+
+function newsRow(item, stacked) {
+  var kind = '<span class="kind"><svg aria-hidden="true"><use href="#' +
+    item.icon + '"/></svg>' + item.kind + "</span>";
+  if (stacked) {
+    return '<div class="demo-news"><span class="stack">' +
+      '<span class="date">' + item.date + "</span>" + kind + "</span>" +
+      '<span class="body">' + item.body + "</span></div>";
+  }
+  return '<div class="demo-news"><span class="date">' + item.date + "</span>" +
+    '<span class="body">' + kind + item.body + "</span></div>";
+}
+
+function card(flat) {
+  // The award carries a glyph too, so the mark-only treatment has something
+  // to show once the words are suppressed.
+  var venue = '<p class="venue">HCOMP 2024 ' +
+    '<span class="award"><svg aria-hidden="true"><use href="#c-award"/></svg>' +
+    'Best Paper Award</span></p>';
+  if (flat) {
+    return '<article class="demo-card flat"><div>' +
+      "<h5>Investigating What Factors Influence Users\u2019 Rating of Harmful " +
+      "Algorithmic Bias and Discrimination</h5>" + venue + "</div></article>";
+  }
+  return '<article class="demo-card"><div class="thumb">FIGURE</div><div>' +
+    "<h5>Investigating What Factors Influence Users\u2019 Rating of Harmful " +
+    "Algorithmic Bias and Discrimination</h5>" +
+    '<p class="authors">Sara Kingsley*, <u>Jiayin Zhi*</u>, Wesley Hanwen Deng, ' +
+    "Motahhare Eslami, Hong Shen.</p>" + venue +
+    '<div class="btns">' + buttons() + "</div></div></article>";
+}
+
+function nav() {
+  return '<div class="demo-nav">' +
+    '<span class="home"><svg aria-hidden="true"><use href="#g-home"/></svg></span>' +
+    '<span class="on">ABOUT</span><span>RESEARCH</span><span>PUBLICATIONS</span>' +
+    '<span class="toggle"><svg aria-hidden="true"><use href="#g-moon"/></svg></span></div>';
+}
+
+function colourSpec(p) {
+  var el = document.createElement("section");
+  el.className = "spec lab lab-mono";
+  el.style.setProperty("--a-strong", p.strong);
+  el.style.setProperty("--a-soft", p.soft);
+  if (p.wash) el.style.setProperty("--wash", p.wash);
+  el.innerHTML =
+    '<div class="spec-head"><h3>' + p.name + "</h3>" +
+      (p.duo ? '<span class="duo">' + (p.duo === true ? "two hues" : p.duo) + '</span>' : "") +
+      '<span class="hex">' + p.strong + " &middot; " + p.soft + "</span></div>" +
+    '<p class="spec-note">' + p.note + "</p>" +
+    '<div class="ramp"><i style="background:var(--strong)"></i>' +
+      '<i style="background:var(--soft)"></i>' +
+      '<i style="background:var(--line)"></i>' +
+      '<i style="background:var(--wash)"></i></div>' +
+    '<div class="readout"></div>' +
+    '<div class="demo">' + nav() + '<div class="demo-body">' + newsRow(NEWS[0], false) +
+      '<h4><svg aria-hidden="true"><use href="#g-bookmark"/></svg>SELECTED WORKS</h4>' +
+      card(false) + "</div></div>";
+  return el;
+}
+
+// Treatments that move the category into the left column share one markup path.
+var STACKED = { "lab-margin": true, "lab-meta": true };
+
+function labelSpec(l, i) {
+  var el = document.createElement("section");
+  el.className = "spec lab " + l.cls;
+  el.style.setProperty("--a-strong", GREENS[2].strong);
+  el.style.setProperty("--a-soft", GREENS[2].soft);
+  el.innerHTML =
+    '<div class="lab-title"><span class="n">' + (i + 1) + "</span><h3>" + l.name + "</h3></div>" +
+    '<p class="spec-note">' + l.note + "</p>" +
+    '<div class="demo"><div class="demo-body" style="padding:16px 20px 0">' +
+      NEWS.map(function (n) { return newsRow(n, STACKED[l.cls] || false); }).join("") +
+      card(true) + "</div></div>";
+  return el;
+}
+
+function mount(id, items, make) {
+  var host = document.getElementById(id);
+  host.style.display = "flex";
+  host.style.flexDirection = "column";
+  host.style.gap = "22px";
+  items.forEach(function (item, i) { host.appendChild(make(item, i)); });
+}
+
+mount("greens", GREENS, colourSpec);
+mount("blues", BLUES, colourSpec);
+mount("thinking", THINKING, colourSpec);
+mount("purpleyellow", PURPLE_YELLOW, colourSpec);
+mount("labels", LABELS, labelSpec);
+
+/* --- live contrast, read off the rendered pixels ------------------ */
+
+function rgb(str) {
+  var n = str.match(/[\d.]+/g);
+  return n ? [+n[0], +n[1], +n[2]] : [255, 255, 255];
+}
+
+function lum(c) {
+  var v = c.map(function (x) {
+    x /= 255;
+    return x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4);
+  });
+  return 0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2];
+}
+
+function ratio(a, b) {
+  var l1 = lum(a), l2 = lum(b);
+  return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
+}
+
+function cell(label, value) {
+  var ok = value >= 4.5;
+  return '<span class="' + (ok ? "pass" : "warn") + '">' + label + " " +
+    value.toFixed(1) + ":1 " + (ok ? "\u2713" : "\u26a0") + "</span>";
+}
+
+function measure() {
+  document.querySelectorAll(".readout").forEach(function (out) {
+    var spec = out.closest(".spec");
+    var ground = rgb(getComputedStyle(spec.querySelector(".demo")).backgroundColor);
+    var strong = rgb(getComputedStyle(spec.querySelector(".demo h4")).color);
+    var soft = rgb(getComputedStyle(spec.querySelector(".demo-nav")).borderTopColor);
+    out.innerHTML = cell("accent text and filled buttons", ratio(strong, ground)) +
+      "<span>soft rules " + ratio(soft, ground).toFixed(1) + ":1</span>";
+  });
+}
+
+measure();
+
+document.querySelectorAll(".bar button").forEach(function (btn) {
+  btn.addEventListener("click", function () {
+    document.querySelectorAll(".bar button").forEach(function (b) {
+      b.setAttribute("aria-pressed", String(b === btn));
+    });
+    document.documentElement.dataset.ground = btn.dataset.g;
+    measure();
+  });
+});
+
+new MutationObserver(measure).observe(document.documentElement, {
+  attributes: true, attributeFilter: ["data-theme"]
+});
+window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", measure);
+</script>

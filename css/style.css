@@ -1,23 +1,25 @@
 /* ---------------------------------------------------------------
    Jiayin Zhi — personal site
 
-   Every accent on the page comes from exactly two hues:
+   Two hues do all the work:
      --accent-strong   headings, links, labels, glyphs
      --accent-soft     borders, underlines, rules
-   Anything softer is the strong hue at low alpha, so the palette stays
-   one family rather than drifting into new tints. Retheming the site is
-   therefore a matter of changing the values in :root and the matching
-   rgba() tints — nothing else references a colour literal.
+   Everything softer is the strong hue at low alpha, so the purple stays
+   one family. The one exception is deliberate: --accent-wash is yellow,
+   and it appears only where something is marked — a hovered link, the
+   award. Purple carries the page; yellow points at things.
    --------------------------------------------------------------- */
 
 :root {
-  --accent-strong: #7e3b94;
-  --accent-soft: #b384c2;
-  --accent-wash: rgba(126, 59, 148, 0.10);   /* hover tint, category chips */
-  --accent-line: rgba(126, 59, 148, 0.13);   /* card boundary */
-  --accent-shadow: rgba(126, 59, 148, 0.04);
-  --accent-shadow-lift: rgba(126, 59, 148, 0.10);
+  --accent-strong: #5c2a6d;
+  --accent-soft: #b48fc4;
+  --accent-line: rgba(92, 42, 109, 0.15);    /* card boundary */
+  --accent-shadow: rgba(92, 42, 109, 0.05);
+  --accent-shadow-lift: rgba(92, 42, 109, 0.12);
   --on-accent: #fff;                         /* text on a filled purple */
+
+  --accent-wash: rgba(247, 208, 70, 0.45);   /* the highlighter */
+  --on-wash: #000;                           /* text sitting in it */
 
   --ink: #000;
   --ink-soft: rgba(0, 0, 0, 0.7);            /* author lines */
@@ -32,6 +34,7 @@
   --serif: "Cormorant Garamond", Georgia, serif;
   --ui: "Instrument Sans", var(--sans);
   --page: 980px;
+  --hang: 96px;   /* news category slot; must clear the longest word */
 }
 
 * { box-sizing: border-box; }
@@ -48,15 +51,18 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Links keep their colour on hover and signal with a tint of the same
-   purple, so no second dark purple enters the palette. */
+/* Hovering marks a link the way a highlighter would: the text goes to ink
+   and the background goes yellow. One behaviour for every link on the page. */
 a {
   color: var(--accent-strong);
   text-decoration: none;
   transition: color 0.15s, background-color 0.15s;
 }
 
-a:hover { background-color: var(--accent-wash); }
+a:hover {
+  background-color: var(--accent-wash);
+  color: var(--on-wash);
+}
 
 .wrap {
   max-width: var(--page);
@@ -94,7 +100,7 @@ a:hover { background-color: var(--accent-wash); }
 }
 
 .nav a:hover {
-  color: var(--ink);
+  color: var(--on-wash);
   background-color: var(--accent-wash);
 }
 
@@ -258,27 +264,46 @@ a:hover { background-color: var(--accent-wash); }
   white-space: nowrap;
 }
 
-/* Shared chip: news categories and the award marker. */
-.news .kind,
-.work .award {
-  display: inline-block;
-  padding: 1px 9px 2px;
-  border-radius: 999px;
-  background: var(--accent-wash);
-  color: var(--accent-strong);
-  font-family: var(--sans);
-  font-size: 11px;
-  font-style: normal;
-  font-weight: 700;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  vertical-align: 1px;
+/* Hanging indent: the category holds a fixed slot on the first line and the
+   sentence hangs past it, so categories line up into a column inside the
+   running text without needing a grid column of their own. */
+.news .item {
+  display: block;
+  padding-left: var(--hang);
+  text-indent: calc(var(--hang) * -1);
 }
 
-.news .kind { margin-right: 8px; }
+.news .kind {
+  display: inline-block;
+  width: calc(var(--hang) - 8px);
+  text-indent: 0;
+  font-family: var(--sans);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--accent-strong);
+  white-space: nowrap;
+}
 
 .news .venue { font-style: italic; }
+
+/* The award is a distinction rather than a category, so it is the one label
+   that gets marked with the highlighter. */
+.work .award {
+  display: inline-block;
+  padding: 1px 7px 2px;
+  border-radius: 2px;
+  background: var(--accent-wash);
+  color: var(--on-wash);
+  font-family: var(--sans);
+  font-size: 10.5px;
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
 
 /* News links read as body text with a dashed rule, not as links. */
 .news a {
@@ -286,10 +311,13 @@ a:hover { background-color: var(--accent-wash); }
   text-decoration: underline dashed var(--accent-soft);
   text-decoration-thickness: 1.5px;
   text-underline-offset: 4px;
-  transition: background-color 0.2s;
+  transition: color 0.2s, background-color 0.2s;
 }
 
-.news a:hover { background-color: var(--accent-wash); }
+.news a:hover {
+  color: var(--on-wash);
+  background-color: var(--accent-wash);
+}
 
 /* --- works ----------------------------------------------------- */
 
@@ -347,7 +375,6 @@ a:hover { background-color: var(--accent-wash); }
 }
 
 .work .venue { margin: 0 0 12px; font-size: 16px; font-style: italic; color: var(--body-grey); }
-.work .award { font-style: normal; color: var(--accent-strong); }
 
 .work .links { display: flex; flex-wrap: wrap; gap: 10px; }
 
@@ -496,14 +523,18 @@ a:hover { background-color: var(--accent-wash); }
 
 :root[data-theme="dark"] {
   /* Same two roles, lifted for a dark ground: the strong purple carries
-     text, the soft purple stays behind it on borders. */
-  --accent-strong: #c79ad9;
-  --accent-soft: #8f66a3;
-  --accent-wash: rgba(199, 154, 217, 0.16);
-  --accent-line: rgba(199, 154, 217, 0.18);
+     text, the soft purple stays behind it on borders. The highlighter has
+     to go nearly opaque here, because a translucent yellow over a dark
+     ground reads as brown — so what sits in it flips to dark ink. */
+  --accent-strong: #c49ad4;
+  --accent-soft: #8a6b99;
+  --accent-line: rgba(196, 154, 212, 0.18);
   --accent-shadow: rgba(0, 0, 0, 0.35);
   --accent-shadow-lift: rgba(0, 0, 0, 0.55);
   --on-accent: #14101a;
+
+  --accent-wash: rgba(247, 208, 70, 0.82);
+  --on-wash: #14101a;
 
   --ink: #ece8f0;
   --ink-soft: rgba(236, 232, 240, 0.72);
@@ -575,5 +606,10 @@ a:hover { background-color: var(--accent-wash); }
 
   .nav .wrap { gap: 16px; overflow-x: auto; }
   .news { max-height: none; overflow: visible; padding-right: 0; }
+
+  /* Too narrow to hang a label and still leave a readable measure, so the
+     category returns to the flow. */
   .news p { grid-template-columns: 1fr; gap: 5px; }
+  .news .item { padding-left: 0; text-indent: 0; }
+  .news .kind { width: auto; margin-right: 10px; }
 }
