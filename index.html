@@ -451,6 +451,117 @@
     window.scrollBy({ top: e.deltaY, left: 0, behavior: 'instant' });
   }, { passive: false });
 })();
+
+// The news scroller, built as a dated scale rather than a generic bar: one
+// tick per entry, a longer tick carrying the year where it turns, and a
+// highlighter stroke for the thumb. Drag the thumb, or click anywhere on the
+// rail to jump. The native bar is hidden in CSS.
+(function () {
+  var news = document.querySelector('.news');
+  if (!news) return;
+
+  var wrap = document.createElement('div');
+  wrap.className = 'news-scroll';
+  news.parentNode.insertBefore(wrap, news);
+  wrap.appendChild(news);
+
+  var rail = document.createElement('div');
+  rail.className = 'rail';
+  rail.setAttribute('aria-hidden', 'true');
+  rail.innerHTML = '<div class="rail-line"></div>';
+
+  var thumb = document.createElement('div');
+  thumb.className = 'thumb';
+  rail.appendChild(thumb);
+  wrap.appendChild(rail);
+
+  // Keyboard users lose nothing when the native bar goes away.
+  news.setAttribute('tabindex', '0');
+  news.setAttribute('role', 'region');
+  news.setAttribute('aria-label', 'News, scrollable');
+
+  var entries = Array.prototype.slice.call(news.querySelectorAll('p'));
+  var ticks = [];
+
+  function offsetWithin(el) {
+    return el.getBoundingClientRect().top
+      - news.getBoundingClientRect().top + news.scrollTop;
+  }
+
+  function build() {
+    ticks.forEach(function (t) { t.remove(); });
+    ticks = [];
+    var total = news.scrollHeight;
+    if (total <= news.clientHeight) return;
+
+    var lastYear = null;
+    entries.forEach(function (p) {
+      var stamp = p.querySelector('.date');
+      var year = stamp ? stamp.textContent.trim().split('/')[1] : null;
+      var turns = year && year !== lastYear;
+      lastYear = year;
+
+      var t = document.createElement('span');
+      t.className = 'tick' + (turns ? ' year' : '');
+      if (turns) t.setAttribute('data-year', year);
+      t.style.top = (offsetWithin(p) / total * 100) + '%';
+      rail.appendChild(t);
+      ticks.push(t);
+    });
+  }
+
+  function sync() {
+    var total = news.scrollHeight;
+    var view = news.clientHeight;
+    if (total <= view + 1) { rail.style.display = 'none'; return; }
+    rail.style.display = '';
+    thumb.style.height = (view / total * 100) + '%';
+    thumb.style.top = (news.scrollTop / total * 100) + '%';
+  }
+
+  news.addEventListener('scroll', function () {
+    requestAnimationFrame(sync);
+  }, { passive: true });
+
+  window.addEventListener('resize', function () { build(); sync(); });
+
+  // Drag the marker.
+  var from = 0, at = 0, dragging = false;
+
+  thumb.addEventListener('pointerdown', function (e) {
+    dragging = true;
+    from = e.clientY;
+    at = news.scrollTop;
+    thumb.classList.add('grabbing');
+    thumb.setPointerCapture(e.pointerId);
+    e.preventDefault();
+    e.stopPropagation();
+  });
+
+  thumb.addEventListener('pointermove', function (e) {
+    if (!dragging) return;
+    var travel = (e.clientY - from) / rail.clientHeight * news.scrollHeight;
+    news.scrollTop = at + travel;
+  });
+
+  function release() { dragging = false; thumb.classList.remove('grabbing'); }
+  thumb.addEventListener('pointerup', release);
+  thumb.addEventListener('pointercancel', release);
+
+  // Click the rail to jump there.
+  rail.addEventListener('pointerdown', function (e) {
+    if (e.target === thumb) return;
+    var box = rail.getBoundingClientRect();
+    var pos = (e.clientY - box.top) / box.height;
+    news.scrollTo({
+      top: pos * news.scrollHeight - news.clientHeight / 2,
+      behavior: 'smooth'
+    });
+  });
+
+  build();
+  sync();
+})();
 </script>
 
 </body>

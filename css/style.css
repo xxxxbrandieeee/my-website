@@ -19,6 +19,8 @@
   --on-accent: #fff;                         /* text on a filled purple */
 
   --accent-wash: rgba(247, 208, 70, 0.45);   /* the highlighter */
+  --marker: rgba(247, 208, 70, 0.85);        /* the rail thumb */
+  --marker-strong: #f0c62e;
   --on-wash: #000;                           /* text sitting in it */
 
   --ink: #000;
@@ -266,12 +268,11 @@ a:hover {
 
 .news {
   max-height: 250px;
-  /* Always show the bar, not just while scrolling: the wheel is passed
-     through to the page, so the bar is the only affordance left. */
   overflow-y: scroll;
-  padding-right: 22px;
-  scrollbar-width: auto;
-  scrollbar-color: var(--accent-soft) var(--accent-line);
+  padding-right: 52px;   /* clears the rail */
+  /* The native bar is replaced by .rail, built in script. */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   /* Fade the bottom edge so a clipped line reads as "more below" rather than
      as the end of the list. Dropped once you have scrolled to the end. */
   -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 36px), transparent);
@@ -283,24 +284,78 @@ a:hover {
   mask-image: none;
 }
 
-.news::-webkit-scrollbar { width: 12px; }
+.news::-webkit-scrollbar { display: none; }
 
-.news::-webkit-scrollbar-track {
+/* --- the news rail ---------------------------------------------- */
+
+/* Rather than a generic bar, the scroller is a scale: one tick per entry,
+   a longer tick where the year turns, and a highlighter stroke for the
+   thumb — the same yellow that marks anything else on the page. It reads
+   as a measure of how much news there is and where you are in it. */
+
+.news-scroll { position: relative; }
+
+.rail {
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  right: 6px;
+  width: 30px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.rail-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 21px;
+  width: 1px;
   background: var(--accent-line);
-  border-radius: 6px;
 }
 
-.news::-webkit-scrollbar-thumb {
+.rail .tick {
+  position: absolute;
+  left: 21px;
+  width: 6px;
+  height: 1px;
   background: var(--accent-soft);
-  border-radius: 6px;
-  border: 2px solid transparent;
-  background-clip: padding-box;
+  opacity: 0.7;
 }
 
-.news::-webkit-scrollbar-thumb:hover {
+/* Where the year turns, the tick runs long and carries the year. */
+.rail .tick.year {
+  width: 10px;
+  opacity: 1;
   background: var(--accent-strong);
-  background-clip: padding-box;
 }
+
+.rail .tick.year::before {
+  content: attr(data-year);
+  position: absolute;
+  right: 12px;
+  top: -6px;
+  font-family: var(--ui);
+  font-size: 9px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.rail .thumb {
+  position: absolute;
+  left: 15px;
+  width: 13px;
+  min-height: 22px;
+  border-radius: 2px;
+  background: var(--marker);
+  cursor: grab;
+  transition: background-color 0.15s;
+}
+
+.rail:hover .thumb { background: var(--marker-strong); }
+.rail .thumb.grabbing { background: var(--marker-strong); cursor: grabbing; }
 
 /* Date gets its own column so the entries line up; the category is a chip
    rather than bracketed text. */
@@ -639,6 +694,8 @@ a:hover {
   --on-accent: #14101a;
 
   --accent-wash: rgba(247, 208, 70, 0.82);
+  --marker: rgba(247, 208, 70, 0.78);
+  --marker-strong: #f7d046;
   --on-wash: #14101a;
 
   --ink: #ece8f0;
@@ -714,6 +771,7 @@ a:hover {
 
   .nav .wrap { gap: 16px; overflow-x: auto; }
   .news { max-height: none; overflow: visible; padding-right: 0; }
+  .rail { display: none; }
 
   /* Too narrow to hang a label and still leave a readable measure, so the
      category returns to the flow. */
