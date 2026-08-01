@@ -16,9 +16,13 @@
   --body-grey: #4c4c4c;                      /* news copy, venues */
   --muted: #737373;                          /* sidebar meta, inactive nav */
   --rule: #e4e4e4;
-  --bg: #fff;
+  /* Swapped: the page is plain white and the warmth sits in the bar, so
+     the tint appears only in a 60px strip at the top rather than across
+     the whole screen. */
+  --bg: #ffffff;
+  --bar: #fffefc;
   --card-bg: #fff;
-  --thumb-bg: #faf9fb;
+  --thumb-bg: #fbfaf7;
 
   --sans: "Lato", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --serif: "Cormorant Garamond", Georgia, serif;
@@ -71,7 +75,7 @@ a {
   position: sticky;
   top: 0;
   z-index: 10;
-  background: rgba(255, 255, 255, 0.94);
+  background: rgba(255, 254, 252, 0.96);
   backdrop-filter: saturate(180%) blur(8px);
   border-bottom: 1px solid var(--rule);
 }
