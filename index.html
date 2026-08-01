@@ -362,6 +362,74 @@
 
   sync();
 })();
+
+// Scroll behaviour: a reading-progress fill on the nav's top rule, and
+// section headings and work cards rising into place as they arrive.
+(function () {
+  var root = document.documentElement;
+  var nav = document.querySelector('.nav');
+  var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Elements are only hidden once script is running, so with JS off or
+  // reduced motion on, nothing is ever invisible.
+  var pending = [];
+  if (!still) {
+    pending = Array.prototype.slice.call(
+      document.querySelectorAll('.section > h2, .work'));
+    pending.forEach(function (el) { el.classList.add('reveal'); });
+  }
+
+  var batch = 0;
+
+  function reveal(el) {
+    el.style.transitionDelay = Math.min(batch++, 3) * 70 + 'ms';
+    el.classList.add('in');
+    // Strip the classes once it has arrived, so this transform stops
+    // competing with the card's hover lift.
+    el.addEventListener('transitionend', function () {
+      el.classList.remove('reveal', 'in');
+      el.style.transitionDelay = '';
+    }, { once: true });
+  }
+
+  // A sweep rather than an IntersectionObserver: a fast flick or an anchor
+  // jump can carry an element from below the fold to above it between two
+  // observer samples, leaving it stranded invisible. Checking positions
+  // directly cannot miss.
+  function sweep() {
+    batch = 0;
+    var limit = window.innerHeight;
+    for (var i = pending.length - 1; i >= 0; i--) {
+      if (pending[i].getBoundingClientRect().top < limit) {
+        reveal(pending[i]);
+        pending.splice(i, 1);
+      }
+    }
+  }
+
+  function progress() {
+    if (!nav) return;
+    var max = root.scrollHeight - root.clientHeight;
+    nav.style.setProperty('--progress', max > 0 ? (root.scrollTop / max).toFixed(4) : 1);
+  }
+
+  var queued = false;
+  function frame() {
+    progress();
+    if (pending.length) sweep();
+    queued = false;
+  }
+
+  function onScroll() {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(frame);
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  frame();
+})();
 </script>
 
 </body>

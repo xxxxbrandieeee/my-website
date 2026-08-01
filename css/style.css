@@ -80,8 +80,30 @@ a:hover {
   z-index: 10;
   background: rgba(255, 255, 255, 0.94);
   backdrop-filter: saturate(180%) blur(8px);
-  border-top: 3px solid var(--accent-soft);
   border-bottom: 1px solid var(--rule);
+}
+
+/* The rule along the top of the nav doubles as a reading-progress track:
+   the soft hue is the track, the strong hue fills it as you scroll. */
+.nav::before,
+.nav::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 3px;
+}
+
+.nav::before {
+  right: 0;
+  background: var(--accent-soft);
+}
+
+.nav::after {
+  width: 100%;
+  background: var(--accent-strong);
+  transform: scaleX(var(--progress, 0));
+  transform-origin: left;
 }
 
 .nav .wrap {
@@ -429,6 +451,24 @@ a:hover {
   font-size: 16px;
   font-weight: 300;
   color: var(--ink);
+}
+
+/* --- scroll reveal ---------------------------------------------- */
+
+/* The class is applied by script, so with JS off nothing is ever hidden.
+   Once an element has finished arriving the classes are stripped, which
+   keeps this transform from overriding the card's hover lift. */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.55s ease, transform 0.55s ease;
+  }
+
+  .reveal.in {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 /* --- motion ----------------------------------------------------- */
