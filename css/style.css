@@ -1,15 +1,3 @@
-/* ---------------------------------------------------------------
-   Jiayin Zhi — personal site
-
-   Two hues do all the work:
-     --accent-strong   headings, links, labels, glyphs
-     --accent-soft     borders, underlines, rules
-   Everything softer is the strong hue at low alpha, so the purple stays
-   one family. The one exception is deliberate: --accent-wash is yellow,
-   and it appears only where something is marked — a hovered link, the
-   award. Purple carries the page; yellow points at things.
-   --------------------------------------------------------------- */
-
 :root {
   --accent-strong: #5c2a6d;
   --accent-soft: #b48fc4;
